@@ -1,0 +1,11 @@
+/**
+ * Custom Css
+ */
+.content.login{
+  max-width: 900px;
+  padding: 15px;
+  margin: 0 auto 0 33.33%;
+}
+.wickedpicker{
+  z-index: 100000 !important;
+}
