@@ -169,6 +169,7 @@ class Admin extends CI_Controller {
 	    		$userdata['password'] = !empty($userdata['']) ? __hash_password($userdata['password']) : '' ;
 	    		unset($userdata['password']);
 	    		if ($userdata['id']) {
+	    			
 	    			$id = $userdata['id'];
 	    			unset($userdata['id']);
 	    			$this->user->updateUser($id,$userdata);		
