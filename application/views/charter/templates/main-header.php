@@ -20,7 +20,7 @@
 								<div class="u-img"><img src="<?php _url('assets/img/profile.jpg');?>" alt="user"></div>
 								<div class="u-text">
 									<h4><?php echo $first_name.''.$last_name; ?></h4>
-									<p class="text-muted"><?php echo $email; ?></p><a href="profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a>
+									<p class="text-muted"><?php echo $email; ?></p><a href="<?php _url('my-profile'); ?>" class="btn btn-rounded btn-danger btn-sm">View Profile</a>
 								</div>
 							</div>
 						</li>

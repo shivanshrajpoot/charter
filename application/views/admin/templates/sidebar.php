@@ -61,6 +61,13 @@
 					<span class="badge badge-count"><?php echo $count_info['aircrafts'] ?></span>
 				</a>
 			</li>
+			<li class="nav-item <?php echo $this->uri->segment(2)=='popular-destinations' ? 'active' :'' ;?>">
+				<a href="<?php _url('admin/popular-destinations')?>">
+					<i class="la la-table"></i>
+					<p>Popular Destinations</p>
+					<span class="badge badge-count"><?php echo $count_info['config'] ?></span>
+				</a>
+			</li>
 			<li class="nav-item <?php echo $this->uri->segment(2)=='configure' ? 'active' :'' ;?>">
 				<a href="<?php _url('admin/configure')?>">
 					<i class="la la-table"></i>

@@ -3,28 +3,18 @@
 		<nav class="pull-left">
 			<ul class="nav">
 				<li class="nav-item">
-					<a class="nav-link" href="http://www.themekita.com">
+					<a class="nav-link" href="<?php _url(); ?>">
 						Charter
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">
-						Help
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">
-						Licenses 
 					</a>
 				</li>
 			</ul>
 		</nav>
 		<div class="copyright ml-auto">
-			2018, made with <i class="la la-heart heart text-danger"></i> by Developers</a>
+			<?php echo COPY_RIGHT; ?></a>
 		</div>				
 	</div>
 </footer>
-<?php if (count(@$notification) > 0):?>
+<?php if (@$notification):?>
 	<script type="text/javascript">
 		var $notify = '<?php echo $notification['notify']; ?>'
 		var $notify_obj = JSON.parse('<?php echo_json($notification['notify_obj']); ?>')

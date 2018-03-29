@@ -59,6 +59,9 @@ $route['migrate'] = 'migrate';
  */
 $route['logout'] 						= 'user/logout';
 $route['my-profile']					= 'user/profile';
+$route['success']						= 'user/success_page';
+$route['forgot-password']				= 'user/forgot_password';
+$route['reset-password/(:any)/(:any)']	= 'user/reset_password/$1/$2';
 /**
  * Common Routes
  */
@@ -73,7 +76,7 @@ $route['about-us'] 						= 'home/about_us';
 $route['login'] 						= 'user/login';
 $route['login-via-facebook'] 			= 'user/facebook_login';
 $route['search'] 						= 'home/search';
-$route['all-quotes'] 					= 'home/all_quotes';
+$route['all-quotes/(:any)'] 			= 'home/all_quotes/$1';
 $route['view-quote/(:any)'] 			= 'home/view_quote/$1';
 $route['user/dashboard'] 				= 'user/dashboard';
 /**
@@ -93,10 +96,13 @@ $route['admin/create-charter'] 			= 'admin/create_charter';
 $route['admin/delete-charter'] 			= 'admin/delete_charter';
 $route['admin/create-user'] 			= 'admin/create_user';
 $route['admin/delete-user'] 			= 'admin/delete_user';
+$route['admin/create-destination'] 		= 'admin/create_destination';
+$route['admin/delete-destination'] 		= 'admin/delete_destination';
 $route['admin/email-templates'] 		= 'admin/email_templates';
 $route['admin/static-content'] 			= 'admin/static_content';
 $route['admin/aircrafts'] 				= 'admin/aircrafts';
 $route['admin/assign-user'] 			= 'admin/assign_user';
+$route['admin/popular-destinations']	= 'admin/popular_destinations';
 /**
  * Admin Routes
  */
@@ -112,6 +118,8 @@ $route['charter/aircrafts'] 			= 'charter/aircrafts';
 $route['charter/create-aircraft'] 		= 'charter/create_aircraft';
 $route['charter/delete-aircraft'] 		= 'charter/delete_aircraft';
 $route['charter/delete-quote'] 			= 'charter/delete_quote';
+$route['charter-maps/(:any)'] 			= 'charter/charter_maps/$1';
+$route['charter-maps/create-new'] 		= 'charter/charter_maps/$1';
 /**
  * Charter Routes
  */

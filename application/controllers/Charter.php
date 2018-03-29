@@ -109,4 +109,77 @@ class Charter extends CI_Controller {
 		}	
 	}
 
+	public function charter_maps($id=NULL){
+		$data = [];
+		$data['charter'] = '';
+		/**
+		 * Map
+		 */
+		$this->load->library('googlemaps');
+		$config = array();
+		$config['center'] = 'auto';
+		$config['onboundschanged'] = "
+		var centreGot = false;
+		if (!centreGot) {
+			var mapCentre = map.getCenter();
+			marker_0.setOptions({
+				position: new google.maps.LatLng(mapCentre.lat(), mapCentre.lng()) 
+			});
+		}
+		centreGot = true;";
+		$this->googlemaps->initialize($config);
+		// set up the marker ready for positioning 
+		// once we know the users location
+		$marker = array();
+		$marker['draggable'] = true;
+		$marker['ondragend'] = "$('#lat').val(event.latLng.lat());$('#long').val(event.latLng.lng());";
+		$this->googlemaps->add_marker($marker);
+		$data['map'] = $this->googlemaps->create_map();
+		/**
+		 * Map
+		 */
+		if ($id) {
+			extract($this->input->post());
+			$required = $id == 'create-new' ? '|required' : '';
+			$this->form_validation->set_rules('name', 'Charter Name', 'trim'.$required.'|strip_tags');
+			$this->form_validation->set_rules('email', 'Email Address', 'trim'.$required.'|strip_tags|valid_email');
+			$this->form_validation->set_rules('lat', 'Lattitude', 'trim'.$required.'|strip_tags');
+			$this->form_validation->set_rules('long', 'Longitude', 'trim'.$required.'|strip_tags');
+			$this->form_validation->set_rules('area', 'Service Area', 'trim'.$required.'|strip_tags');
+			if (($this->input->server('REQUEST_METHOD') === 'POST' && $this->form_validation->run() == TRUE) && !empty($this->user_session)) {
+				$data['charter'] = $this->charter->getAllCharters(NULL,['id'=>base64_decode($id)])[0];
+				$charter_data = $this->input->post();
+				if (!empty($id) && $id != 'create-new') {
+					$charter_data['id'] = base64_decode($id);
+					$this->charter->updateCharter($charter_data);
+					$notification = ['title'=>'Success!', 'status'=>'success','message'=>'Charter updated successfully.'];
+				}else if($data['charter']){
+					$charter_data['user_id'] = 0;
+					if ($this->charter->addCharter($charter_data)) {
+						$notification = ['title'=>'Success!','status'=>'success','message'=>'Charter created successfully.'];
+					}
+				} else {
+					echo_json(['status'=>'error','message'=>'Something went wrong.']);
+				}
+				$data['notification'] = 
+				[
+					'notify'		=>	'TRUE',
+					'notify_obj'	=>	[
+											'time'				=>	'1000',
+											'notify_title'		=>	$notification['title'],
+											'notify_message'	=>	$notification['message'],
+											'notify_type'		=>	$notification['status'],
+											'notify_placement'	=>	[
+																		'from'=>'top',
+																		'align'=>'right'
+																	],
+										]
+				];
+			}
+			$data['charter'] = $this->charter->getAllCharters(NULL,['id'=>base64_decode($id)]);
+			$data['charter'] = $data['charter'] ? $data['charter'][0] : [];
+		}
+		load_view('charter-maps',$data,'admin');
+	}
+
 }

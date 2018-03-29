@@ -27,13 +27,17 @@
 							</div>
 						</div>
 						<div class="row form-group">
-							<div class="col-md-6">
+							<div class="col-md-4">
 								<label class="sr-only" for="lat">Lattitude</label>
 								<input type="tel" id="lat" class="form-control" name="lat" placeholder="Lattitude" autocomplete autofocus maxlength="12" value="<?php echo set_value('lat'); ?>">
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-4">
 								<label class="sr-only" for="long">Longitude</label>
 								<input type="tel" id="long" class="form-control" name="long" placeholder="Longitude" autocomplete autofocus maxlength="12" value="<?php echo set_value('long'); ?>">
+							</div>
+							<div class="col-md-4">
+								<label class="sr-only" for="long">Or Use Map</label>
+								<a id="use_map" class="btn btn-primary" href="<?php echo _url('charter-maps/create-new'); ?>">Or Use Map</a>
 							</div>
 						</div>
 						<div class="row form-group">

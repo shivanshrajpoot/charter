@@ -21,30 +21,52 @@ class Home extends CI_Controller {
 			'Requests_model'	=>	'request',
 			'Admin_model'		=>	'admin',
 			'Quotes_model'		=>	'quote',
+			'Popular_destination_model'=>'popular_destination',
 		]);
 		$this->user_session = $this->session->userdata('user');
 	}
 	
 	public function index() {
-		$data['csrf'] = [
-	        'name' => $this->security->get_csrf_token_name(),
-	        'hash' => $this->security->get_csrf_hash()
-	    ];
-	    $post_data = stripKeyValues($this->input->post());
-		$this->form_validation->set_rules('from', 'From ', 'trim|required|strip_tags');
-		$this->form_validation->set_rules('to', 'To', 'trim|required|strip_tags');
-		$this->form_validation->set_rules('dep_date', 'Departure Date', 'trim|required|strip_tags');
-		$this->form_validation->set_rules('dep_time', 'Departure Time', 'trim|required|strip_tags');
-		$this->form_validation->set_rules('no_of_pass', 'No. of Passengers', 'trim|required|strip_tags');
-		$this->form_validation->set_rules('no_of_pass', 'No. of Passengers', 'trim|required|strip_tags');
-		if ($this->input->server('REQUEST_METHOD') === 'POST' && $this->form_validation->run() == TRUE) {
-			unset($post_data['return']);
-			$temp_id = $this->request->add($post_data);
-			foreach ($this->charter->getAllCharters('email,name') as $key => $charter) {
-				__send_email($charter['email'],'charter_notify',$charter,stripKeyValues($post_data));
+		$data = [];
+		$data['popular_destinations'] = $this->popular_destination->getAll();
+		if ($this->user_session) {
+			$data['quotes_url'] = 'all-quotes/'.base64_encode($this->user_session['id']);
+		}
+		if ($this->input->server('REQUEST_METHOD') === 'POST') {
+			if ($this->input->post('contact_us') == 'contact_us') {
+		    	$post_data = stripKeyValues($this->input->post());
+				extract(array_filter($post_data));
+				if (!empty($email) && !empty($message)) {
+					__send_email($email,'contact_reply',['message'=>$message,'link'=>base_url()],'');
+					__send_email(ADMIN_EMAIL,'contact_us',['message'=>$message,'link'=>base_url()],'');
+					$success_data['title'] = 'Success'; 
+					$success_data['message'] = 'Thank You For Contacting Us.We will get back to you soon...'; 
+					$success_data['type'] = 'success'; 
+					$this->session->set_flashdata('success_page',$success_data);
+					redirect('success');
+				}
+			}else{
+				$this->form_validation->set_rules('from', 'From ', 'trim|required|strip_tags');
+				$this->form_validation->set_rules('to', 'To', 'trim|required|strip_tags');
+				$this->form_validation->set_rules('dep_date', 'Departure Date', 'trim|required|strip_tags');
+				$this->form_validation->set_rules('dep_time', 'Departure Time', 'trim|required|strip_tags');
+				$this->form_validation->set_rules('no_of_pass', 'No. of Passengers', 'trim|required|strip_tags');
+				$this->form_validation->set_rules('no_of_pass', 'No. of Passengers', 'trim|required|strip_tags');
+				if (!$this->user_session) {
+					$msg = 'Please login to see available quotes...';
+					$this->session->set_flashdata('msg',$msg);
+					redirect('login');
+				}
+				if ($this->form_validation->run() == TRUE) {
+					unset($post_data['return']);
+					$temp_id = $this->request->add($post_data);
+					foreach ($this->charter->getAllCharters('email,name') as $key => $charter) {
+						__send_email($charter['email'],'charter_notify',$charter,stripKeyValues($post_data));
+					}
+					$this->session->set_flashdata('temp_id',$temp_id);
+					$data['show_loader'] = 'true';
+				}
 			}
-			$this->session->set_flashdata('temp_id',$temp_id);
-			$data['show_loader'] = 'true';
 		}
 		load_view('home',$data,'user',TRUE);
 	}
@@ -60,20 +82,18 @@ class Home extends CI_Controller {
 			$this->form_validation->set_rules('password', 'Password', 'trim|required|strip_tags|min_length[8]|max_length[25]');
 			$this->form_validation->set_rules('password_conf', 'Password Confirmation', 'trim|required|strip_tags|min_length[8]|max_length[25]|matches[password]');
 	    	if($this->form_validation->run() == TRUE) {
-	    		$userdata = array_map('_stripTags_trim',$this->input->post());
+	    		$userdata = stripKeyValues($this->input->post());
 	    		unset($userdata['password_conf']);
 	    		$userdata['uuid'] = guid();
+	    		$userdata['type'] = '3';
 	    		$userdata['password'] = __hash_password($userdata['password']);
 	    		if ($this->user->addUser($userdata)) {
+	    			__send_email($_POST['email'],'user_creation',$_POST);
 	    			redirect('login');
 	    		}else{
 	    			$msg = 'Something went wrong.';
 	    		}
 	    	}
-		}
-		if ($_POST['user_id']) {
-
-			redirect('my-profile');
 		}
 		load_view('register',['msg'=>$msg],'user',TRUE);
 	}
@@ -93,9 +113,10 @@ class Home extends CI_Controller {
 		load_view('static-content',$data,'user',TRUE);
 	}
 
-	public function all_quotes(){
-		if ($this->session->flashdata('temp_id')) {
-			$data['quotes'] = $this->quote->getAllQuoteData();
+	public function all_quotes($id){
+		$data['popular_destinations'] = $this->popular_destination->getAll();
+		if ($id) {
+			$data['quotes'] = $this->quote->getAllQuoteData(base64_decode($id));
 			load_view('all-quotes',$data,'user',TRUE);
 		}else{
 			redirect();

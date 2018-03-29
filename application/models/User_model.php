@@ -9,7 +9,8 @@ class User_model extends CI_Model {
     }
 
     public function getUser($email){
-        return $this->db->get_where($this->table,['email'=>$email])->result_array()[0];
+        $data = $this->db->get_where($this->table,['email'=>$email])->result_array();
+        return $data ? $data[0] : FALSE;
     }
 
     public function addUser($userdata){
@@ -23,5 +24,11 @@ class User_model extends CI_Model {
 
     public function deleteUser($id){
         return $this->db->update($this->table,['status'=>'deleted'],['id'=>$id]);
+    }
+
+    public function updateUser($id,$userdata){
+        $where = ['id'=>$id];
+        $this->db->update($this->table,$userdata,['id'=>$id]);
+        return $this->getAllUsers($where);
     }
 }

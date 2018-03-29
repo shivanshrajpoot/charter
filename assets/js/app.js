@@ -63,13 +63,13 @@ $('.edit-charter').on('click',function(){
     var data = table.row( $(this).parents('tr') ).data();
     var modal = $('#createCharter');
     var target_id = $(this).attr('data-target');
-    console.log($(this).attr('data-target'));
+    $('#use_map').attr('href',$(this).attr('data-url'))
     modal.modal('show')
     $('#createCharter .modal-title').html('Edit Charter...')
     modal.find('input').each(function(index){
         let type = $(this).attr('type')
         if (type !=='hidden') {
-            $(this).val(data[index])
+            $(this).val(data[index+1])
         }
     })
     $('<input>').attr({
@@ -142,7 +142,7 @@ $('.delete-aircraft').on('click',function(){
 $('.edit-user').on('click',function(){
 	var data = table.row( $(this).parents('tr') ).data();
 	var modal = $('#createUser');
-	var target_id = $(this).attr('data-target');
+	var target_id = $(this).attr('data-id');
     $('#createUser .modal-title').html('Edit User...')
 	modal.modal('show')
 	modal.find('input').each(function(index){
@@ -238,6 +238,70 @@ $('.delete-quote').on('click',function(){
         });
     })
 })
+
+$('.edit-destination').on('click',function(){
+    var data = table.row( $(this).parents('tr') ).data();
+    var modal = $('#createDestination');
+    var target_id = $(this).attr('data-target');
+    modal.modal('show')
+    $('#createDestination .modal-title').html('Edit Destination...')
+    modal.find('input').each(function(index){
+        let name = $(this).attr('name')
+        let type = $(this).attr('type')
+        if (name !=='image' || type !=='hidden') {
+            $(this).val(data[index]);
+        }
+    })
+    $('<input>').attr({
+        "type": 'hidden',
+        "id": 'target_id',
+        "name": 'id',
+        "value":target_id
+    }).appendTo('form');
+})
+$('.delete-destination').on('click',function(){
+    var data = table.row( $(this).parents('tr') ).data();
+    target_id = $(this).data('target');
+    swal({
+        title: 'Are you sure?',
+        text: "This item will be deleted.",
+        icon: 'warning',
+        confirmButtonColor: '#3085d6',
+        button: 'Ok',
+        closeOnEsc: false,
+        allowOutsideClick:false,
+    }).then(function (result) {
+        $.ajax({
+            url: 'delete-destination', 
+             data: {id:target_id,},
+             cache: false, 
+             type: 'POST', 
+             dataType: 'json',
+             success: function($response){
+                if ($response.success="success") {
+                    swal({
+                        title: $response.message,
+                        text: "Success",
+                        type: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        closeOnEsc: false,
+                        allowOutsideClick:false,
+                        cancelButtonColor: '#d33',
+                        button: 'Ok',
+                        timer: 1000
+                    });
+                    setTimeout(function(){
+                        location.reload()
+                    },1000)
+                }
+             }
+        });
+    })
+})
+
+
+
 $('[data-target="#createCharter"]').on('click',function(){
     $('#createCharter .modal-title').html('Create New Charter...')
 })

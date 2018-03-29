@@ -12,7 +12,7 @@
 							<div class="card-title">User Details</div>
 						</div>
 						<div class="card-body">
-							<?php echo form_open('home/register'); ?>
+							<?php echo form_open(); ?>
 								<div class=" form-group">
 									<div class="col-md-12">
 										<label class="sr-only" for="name">First Name</label>

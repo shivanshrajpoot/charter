@@ -56,10 +56,10 @@
 	<body>
 	<div id="loader_hel" style="display: none;">
 		<div id="loader_text">
-			<p>Submitting Your request to <?php echo $count_info['charters']; ?> Charters accross the U.K.</p>
+			<p>Submitting Your request to <?php echo @$count_info['charters']; ?> Charters accross the U.K.</p>
 		</div>
 		<div id="cont_to_quotes" style="display: none;">
-			<button class="btn btn-lg btn-danger" type="button" onClick="window.location.assign('<?php _url('all-quotes') ?>')" >Continue to the quotes...</button>	
+			<button class="btn btn-lg btn-danger" type="button" onClick="window.location.assign('<?php _url(@$quotes_url) ?>')" >Continue to the quotes...</button>	
 			<button class="btn btn-lg btn-secondary" type="button" onClick="$('#loader_hel').hide();" >Cancel</button>	
 		</div>
 	</div>

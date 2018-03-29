@@ -42,6 +42,13 @@ include('system/helpers/file_helper.php');
 		$app_info = $CI->admin->get_any_table('config');
 		$data['static_content'] = $CI->admin->get_any_table('static_content');
 		$_empty = [];
+		foreach ($data['static_content'] as $key => $value) {
+			if ($value['type'] == 'text') {
+				$_empty[$value['page_name']] = $value['content'];
+				$_constant = strtoupper($value['page_name']);
+				!defined($_constant) ? define($_constant,$value['content']) : '';
+			}
+		}
 		foreach ($app_info as $key => $value) {
 			$_empty[$value['key']] = $value['value'];
 			$_constant = strtoupper($value['key']);
@@ -54,6 +61,9 @@ include('system/helpers/file_helper.php');
 				$data['count_info'] = $CI->admin->get_all_counts();
 		}
 		if ($folder == 'user' && $switch_header == FALSE) {
+			$data['count_info'] = $CI->user_session ? count($CI->db->select('id')
+											   ->from('charters')
+											   ->get()->result_array()) : 0;
 			$CI->load->view($folder.'/templates/header1',$data);
 			$CI->load->view($folder.'/'.$template,$data);
 			$CI->load->view($folder.'/templates/footer1',$data);
@@ -321,10 +331,10 @@ include('system/helpers/file_helper.php');
 			    $patternFind1[2] 	= '/{password}/';
 			    $patternFind1[3] 	= '/{mobile_number}/';
 			    
-			    $replaceFind1[0] 	= $email_data['name'];
+			    $replaceFind1[0] 	= $email_data['first_name'].' '.$email_data['last_name'];
 			    $replaceFind1[1] 	= $email_data['email'];
 			    $replaceFind1[2] 	= $email_data['password'];
-			    $replaceFind1[3] 	= $email_data['mobile'];
+			    $replaceFind1[3] 	= $email_data['contact'];
 			    $message = nl2br($message);
 			    $txtdesc_contact	= stripslashes($message);
 			    $contact_sub      = stripslashes($subject);
@@ -334,7 +344,7 @@ include('system/helpers/file_helper.php');
 			break;			
 
 			case "reset_password":
-			    $adminEmail = $CI->admin_model->_getConfigurationByKey('signup_email');
+			    $adminEmail = $CI->admin_model->_getConfigurationByKey('admin_email');
 			    $msg = $CI->admin_model->_getMessage('reset_password');
 			    
 			    $message  	= html_entity_decode($msg->body);
@@ -355,7 +365,7 @@ include('system/helpers/file_helper.php');
 			break;
 
 			case "contact_reply":
-			    $adminEmail = $CI->admin_model->_getConfigurationByKey('signup_email');
+			    $adminEmail = $CI->admin_model->_getConfigurationByKey('admin_email');
 			    $msg = $CI->admin_model->_getMessage('contact_reply');
 
 			    $message  	= html_entity_decode($msg->body);
@@ -376,7 +386,7 @@ include('system/helpers/file_helper.php');
 			break;
 
 			case "contact_us":
-			    $adminEmail = $CI->admin_model->_getConfigurationByKey('signup_email');
+			    $adminEmail = $CI->admin_model->_getConfigurationByKey('admin_email');
 			    $msg = $CI->admin_model->_getMessage('contact_us');
 
 			    $message  	= html_entity_decode($msg->body);
@@ -407,22 +417,12 @@ include('system/helpers/file_helper.php');
 	    $CI->phpmailer->Username = $CI->admin_model->_getConfigurationByKey('smtp_uName');
 	    $CI->phpmailer->Password = $CI->admin_model->_getConfigurationByKey('smtp_uPass');
 	    $CI->phpmailer->FromName = 'Charters';
-	    $mail_from = $CI->admin_model->_getConfigurationByKey('signup_email');
+	    $mail_from = $CI->admin_model->_getConfigurationByKey('admin_email');
 	    $CI->phpmailer->addAddress($email);
 	    $CI->phpmailer->isHTML(true);
 	    $CI->phpmailer->Subject = $contact_sub;
 	    $CI->phpmailer->Body    = $ebody_contact;
-
-	    if(!$CI->phpmailer->send()) {
-	    	
-	    	return 0;
-	    // echo 'Mailer Error: ' . $CI->phpmailer->ErrorInfo;
-	    } else {
-
-	      return 1;
-	      // echo 'Message has been sent 1';
-	    }
-	       //==========================================================
+	    return !$CI->phpmailer->send() ? 0 : 1;
 	}
 
 

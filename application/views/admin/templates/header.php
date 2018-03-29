@@ -11,5 +11,11 @@
 	<link rel="stylesheet" href="<?php _url('assets/css/jquery.dataTables.min.css'); ?>">
 	<!-- jQuery TimePicker Style -->
 	<link rel="stylesheet" href="<?php _url('assets/css/wickedpicker.min.css');?>">
+	<?php if ($this->uri->segment(1) == 'charter-maps'): ?>
+		<script type="text/javascript">
+				var centreGot = false;
+		</script>
+		<?php echo @$map['js']; ?>
+	<?php endif ?>
 </head>
 <body>

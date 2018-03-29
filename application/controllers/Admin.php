@@ -20,6 +20,7 @@ class Admin extends CI_Controller {
 								'Admin_model'	=>'admin',
 								'Requests_model'=>'request',
 								'Aircrafts_model'=>'aircraft',
+								'Popular_destination_model'=>'popular_destination',
 							]);
 		$this->user_session = $this->session->userdata('user');
 	}
@@ -64,6 +65,7 @@ class Admin extends CI_Controller {
 			echo_json(['status'=>'failure']);
 		}
 	}
+
 	public function delete_user(){
 		extract($this->input->post());
 		if ($this->user->deleteUser($id)) {
@@ -81,28 +83,28 @@ class Admin extends CI_Controller {
 	}
 
 	public function configure(){
-		$data['configuration'] = $this->admin->get_any_table('config');
 		if ($this->input->server('REQUEST_METHOD') === 'POST') {
 			foreach ($_POST as $key => $value) {
-				$this->admin->update_any_table('config',['value'=>$value],['key'=>$key]);
+				$result = $this->admin->update_any_table('config',['value'=>$value],['key'=>$key]);
 			}
-			$data['notification'] = 
-			[
-				'notify'		=>	'TRUE',
-				'notify_obj'	=>	[
-										'time'				=>	'1000',
-										'notify_title'		=>	'Success!',
-										'notify_message'	=>	'Configuration Updated Successfully',
-										'notify_type'		=>	'success',
-										'notify_placement'	=>	[
-																	'from'=>'top',
-																	'align'=>'right'
-																],
-									]
-			];
-		}else{
-			$data['notification'] = FALSE;
+			if ($result) {
+				$data['notification'] = 
+				[
+					'notify'		=>	'TRUE',
+					'notify_obj'	=>	[
+											'time'				=>	'1000',
+											'notify_title'		=>	'Success!',
+											'notify_message'	=>	'Configuration Updated Successfully',
+											'notify_type'		=>	'success',
+											'notify_placement'	=>	[
+																		'from'=>'top',
+																		'align'=>'right'
+																	],
+										]
+				];
+			}
 		}
+		$data['configuration'] = $this->admin->get_any_table('config');
 		load_view('configure',$data,'admin');
 	}
 
@@ -120,12 +122,28 @@ class Admin extends CI_Controller {
 	}
 
 	public function email_templates(){
-		$data['templates'] = $this->admin->get_any_table('email_templates');
 		if ($this->input->server('REQUEST_METHOD') === 'POST') {
 			foreach ($_POST as $key => $value) {
-				$this->admin->update_any_table('email_templates',$value,['template_key'=>$key]);
+				$result = $this->admin->update_any_table('email_templates',$value,['template_key'=>$key]);
+			}
+			if ($result) {
+				$data['notification'] = 
+				[
+					'notify'		=>	'TRUE',
+					'notify_obj'	=>	[
+											'time'				=>	'1000',
+											'notify_title'		=>	'Success!',
+											'notify_message'	=>	'Email Templates Updated Successfully',
+											'notify_type'		=>	'success',
+											'notify_placement'	=>	[
+																		'from'=>'top',
+																		'align'=>'right'
+																	],
+										]
+				];
 			}
 		}
+		$data['templates'] = $this->admin->get_any_table('email_templates');
 		load_view('email-templates',$data,'admin');
 	}
 
@@ -144,6 +162,7 @@ class Admin extends CI_Controller {
 	    		$userdata['uuid'] = guid();
 	    		$userdata['password'] = __hash_password($userdata['password']);
 	    		if ($this->user->addUser($userdata)) {
+
 	    			echo_json(['status'=>'success','message'=>'User Added Successfully.','saved'=>'true']);
 	    		}else{
 	    			echo_json(['status'=>'failed','message'=>'Something went wrong.']);
@@ -151,6 +170,8 @@ class Admin extends CI_Controller {
 	    	}else{
 	    		echo_json(['status'=>'failed','messages'=>validation_errors()]);
 	    	}
+
+	    	
 		}
 	}
 
@@ -191,6 +212,39 @@ class Admin extends CI_Controller {
 	    	echo_json(['status'=>'success','message'=>'User Assigned Successfully.','saved'=>'true','reload'=>'true']);
 		}else{
 	    	echo_json(['status'=>'failed','message'=>'Something went wrong.']);
+		}
+	}
+
+	public function popular_destinations(){
+		$data['popular_destination'] = $this->popular_destination->getAll();
+		load_view('popular-destinations',$data,'admin');
+	}
+
+	public function create_destination(){
+		$destination = stripKeyValues($this->input->post());
+		$this->form_validation->set_rules('title', 'Desitnation Title', 'trim|required|strip_tags');
+		$this->form_validation->set_rules('description', 'Desitnation Desitnation', 'trim|required|strip_tags');
+		$destination['image'] = uploadImage($_FILES['image'],'destinations');
+		if ($this->input->server('REQUEST_METHOD') === 'POST' && $this->form_validation->run() == TRUE) {
+			if (!empty($destination['id'])) {
+				$this->popular_destination->update($destination);
+				echo_json(['status'=>'success','saved'=>'true','message'=>'Destination updated successfully.','reload'=>'true']);
+			}else if ($this->popular_destination->add($destination)) {
+				echo_json(['status'=>'success','saved'=>'true','message'=>'Destination Submitted successfully.','reload'=>'true']);
+			}else{
+				echo_json(['status'=>'failure','message'=>'Something went wrong.']);
+			}
+		}else{
+			echo_json(['messages'=>validation_errors(),'status'=>'failure']);
+		}
+	}
+
+	public function delete_destination(){
+		extract($this->input->post());
+		if ($this->destination->delete($id)) {
+			echo_json(['status'=>'success','saved'=>'true','message'=>'destination deleted successfully.']);
+		}else{
+			echo_json(['status'=>'failure']);
 		}
 	}
 }

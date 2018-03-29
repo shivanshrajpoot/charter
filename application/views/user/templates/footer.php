@@ -14,11 +14,13 @@
 					<h3>Pages</h3>
 					<ul class="gtco-footer-links">
 						<?php foreach ($static_content as $key => $value) { ?>
+						<?php if ($value['type'] == 'page'): ?>
 							<li>
 								<a href="<?php echo base_url($value['url']); ?>">
 									<?php echo strtoupper(str_replace('_',' ',$value['page_name'])); ?>		
 								</a>
 							</li>
+						<?php endif ?>
 						<?php } ?>
 					</ul>
 				</div>

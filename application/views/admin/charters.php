@@ -41,8 +41,8 @@
 														<td><?php echo $charter['long']; ?></td>
 														<td><?php echo $charter['area']; ?></td>
 														<td style="text-align: center;">
-															<button type="button" data-toggle="tooltip" data-title="Delete User" data-target="<?php echo $charter['id']; ?>" class="btn btn-danger delete-charter" ><i class="la la-close"></i></button>
-															<button type="button" data-toggle="tooltip" data-title="Edit User" data-target="<?php echo $charter['id']; ?>" class="btn btn-success edit-charter" ><i class="la la-edit"></i></button>
+															<button type="button" data-toggle="tooltip" data-title="Delete Charter" data-target="<?php echo $charter['id']; ?>" class="btn btn-danger delete-charter" ><i class="la la-close"></i></button>
+															<button type="button" data-url="<?php _url('charter-maps/'.base64_encode($charter['id'])); ?>" data-toggle="tooltip" data-title="Edit Charter" data-target="<?php echo $charter['id']; ?>" class="btn btn-success edit-charter" ><i class="la la-edit"></i></button>
 															<button <?php echo $charter['user_id'] > 0 ? 'disabled' : '' ?>
 															 type="button" data-toggle="tooltip" data-title="Assign User" data-target="<?php echo $charter['id']; ?>" class="btn btn-<?php echo $charter['user_id'] > 0 ? 'default' : 'info' ?> assign-charter" ><i class="la la-user<?php echo $charter['user_id'] > 0 ? '' : '-plus' ?>"></i></button>
 														</td>
