@@ -17,13 +17,8 @@
 				<div class="collapse in" id="collapseExample" aria-expanded="true" style="">
 					<ul class="nav">
 						<li>
-							<a href="#profile">
+							<a href="<?php _url('my-profile'); ?>">
 								<span class="link-collapse">My Profile</span>
-							</a>
-						</li>
-						<li>
-							<a href="#edit">
-								<span class="link-collapse">Edit Profile</span>
 							</a>
 						</li>
 					</ul>

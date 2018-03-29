@@ -1,11 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_create_static_content extends CI_Migration {
+class Migration_create_popular_destinations extends CI_Migration {
 
 	public function up()
 	{
-		if ( ! $this->db->table_exists('static_content'))
+		if ( ! $this->db->table_exists('popular_destinations'))
 		{
 			$this->load->dbforge();
 			$this->dbforge->add_field(array(
@@ -15,26 +15,20 @@ class Migration_create_static_content extends CI_Migration {
 					'unsigned' => FALSE,
 					'auto_increment' => TRUE
 				),
-				'page_name' => array(
+				'title' => array(
 					'type' => 'VARCHAR',
 					'constraint' => '255',
 					'null' => TRUE,
 				),
-				'content' => array(
+				'description' => array(
 					'type' => 'VARCHAR',
 					'constraint' => '255',
 					'null' => TRUE,
 				),
-				'url' => array(
+				'image' => array(
 					'type' => 'VARCHAR',
 					'constraint' => '255',
 					'null' => TRUE,
-				),
-				'type' => array(
-					'type' => 'ENUM("page", "text")',
-					'constraint' => "",
-					'default' => 'page',
-					'null' => FALSE,
 				),
 				'status' => array(
 					'type' => 'ENUM("active", "inactive", "deleted")',
@@ -46,14 +40,14 @@ class Migration_create_static_content extends CI_Migration {
 			$this->dbforge->add_field("`created_on` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP");
 			$this->dbforge->add_field("`updated_on` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
 			$this->dbforge->add_key('id', TRUE);  
-			$this->dbforge->create_table('static_content');
+			$this->dbforge->create_table('popular_destinations');
 		}
 	}
 
 	public function down()
 	{
 		$this->load->dbforge();
-		$this->dbforge->drop_table('static_content');
+		$this->dbforge->drop_table('popular_destinations');
 	}
 }
 ?>

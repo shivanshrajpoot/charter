@@ -24,6 +24,10 @@
 		</div>				
 	</div>
 </footer>
+<script type="text/javascript">
+	var $notify = '<?php echo $notification['notify']; ?>'
+	var $notify_obj = JSON.parse('<?php echo_json($notification['notify_obj']); ?>')
+</script>
 <script src="<?php _url('assets/js/core/jquery.3.2.1.min.js');?>"></script>
 
 <script src="<?php _url('assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js');?>"></script>

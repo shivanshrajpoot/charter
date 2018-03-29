@@ -20,8 +20,13 @@ class Admin extends CI_Controller {
 								'Admin_model'	=>'admin',
 								'Requests_model'=>'request',
 								'Aircrafts_model'=>'aircraft',
+								'Popular_destination_model'=>'popular_destination',
 							]);
 		$this->user_session = $this->session->userdata('user');
+		if ($this->user_session['type']!='1') {
+			$this->session->unset_userdata('user');
+			redirect();
+		}
 	}
 
 	public function dashboard(){
@@ -64,6 +69,7 @@ class Admin extends CI_Controller {
 			echo_json(['status'=>'failure']);
 		}
 	}
+
 	public function delete_user(){
 		extract($this->input->post());
 		if ($this->user->deleteUser($id)) {
@@ -81,28 +87,28 @@ class Admin extends CI_Controller {
 	}
 
 	public function configure(){
-		$data['configuration'] = $this->admin->get_any_table('config');
 		if ($this->input->server('REQUEST_METHOD') === 'POST') {
 			foreach ($_POST as $key => $value) {
-				$this->admin->update_any_table('config',['value'=>$value],['key'=>$key]);
+				$result = $this->admin->update_any_table('config',['value'=>$value],['key'=>$key]);
 			}
-			$data['notification'] = 
-			[
-				'notify'		=>	'TRUE',
-				'notify_obj'	=>	[
-										'time'				=>	'1000',
-										'notify_title'		=>	'Success!',
-										'notify_message'	=>	'Configuration Updated Successfully',
-										'notify_type'		=>	'success',
-										'notify_placement'	=>	[
-																	'from'=>'top',
-																	'align'=>'right'
-																],
-									]
-			];
-		}else{
-			$data['notification'] = FALSE;
+			if ($result) {
+				$data['notification'] = 
+				[
+					'notify'		=>	'TRUE',
+					'notify_obj'	=>	[
+											'time'				=>	'1000',
+											'notify_title'		=>	'Success!',
+											'notify_message'	=>	'Configuration Updated Successfully',
+											'notify_type'		=>	'success',
+											'notify_placement'	=>	[
+																		'from'=>'top',
+																		'align'=>'right'
+																	],
+										]
+				];
+			}
 		}
+		$data['configuration'] = $this->admin->get_any_table('config');
 		load_view('configure',$data,'admin');
 	}
 
@@ -120,29 +126,54 @@ class Admin extends CI_Controller {
 	}
 
 	public function email_templates(){
-		$data['templates'] = $this->admin->get_any_table('email_templates');
 		if ($this->input->server('REQUEST_METHOD') === 'POST') {
 			foreach ($_POST as $key => $value) {
-				$this->admin->update_any_table('email_templates',$value,['template_key'=>$key]);
+				$result = $this->admin->update_any_table('email_templates',$value,['template_key'=>$key]);
+			}
+			if ($result) {
+				$data['notification'] = 
+				[
+					'notify'		=>	'TRUE',
+					'notify_obj'	=>	[
+											'time'				=>	'1000',
+											'notify_title'		=>	'Success!',
+											'notify_message'	=>	'Email Templates Updated Successfully',
+											'notify_type'		=>	'success',
+											'notify_placement'	=>	[
+																		'from'=>'top',
+																		'align'=>'right'
+																	],
+										]
+				];
 			}
 		}
+		$data['templates'] = $this->admin->get_any_table('email_templates');
 		load_view('email-templates',$data,'admin');
 	}
 
 	public function create_user(){
 		if ($this->input->server('REQUEST_METHOD') === 'POST') {
-			$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|strip_tags|is_unique[users.email]');
-			$this->form_validation->set_rules('first_name', 'First Name', 'trim|required|strip_tags|max_length[25]');
-			$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|strip_tags|max_length[25]');
-			$this->form_validation->set_rules('gender', 'Gender', 'trim|required|strip_tags');
+			$this->form_validation->set_rules('email', 'Email', 'trim|valid_email|strip_tags');
+			$this->form_validation->set_rules('first_name', 'First Name', 'trim|strip_tags|max_length[25]');
+			$this->form_validation->set_rules('last_name', 'Last Name', 'trim|strip_tags|max_length[25]');
+			$this->form_validation->set_rules('gender', 'Gender', 'trim|strip_tags');
 			$this->form_validation->set_rules('contact', 'Contact', 'trim|strip_tags|min_length[8]|max_length[12]');
-			$this->form_validation->set_rules('password', 'Password', 'trim|required|strip_tags|min_length[8]|max_length[25]');
-			$this->form_validation->set_rules('password_conf', 'Password Confirmation', 'trim|required|strip_tags|min_length[8]|max_length[25]|matches[password]');
+			$this->form_validation->set_rules('password', 'Password', 'trim|strip_tags|min_length[8]|max_length[25]');
+			if (!empty($_POST['password'])) {
+				$this->form_validation->set_rules('password_conf', 'Password Confirmation', 'trim|strip_tags|min_length[8]|max_length[25]|matches[password]');
+			}
 			if($this->form_validation->run() == TRUE) {
 	    		$userdata = array_map('_stripTags_trim',$this->input->post());
 	    		unset($userdata['password_conf']);
 	    		$userdata['uuid'] = guid();
-	    		$userdata['password'] = __hash_password($userdata['password']);
+	    		$userdata['password'] = !empty($userdata['']) ? __hash_password($userdata['password']) : '' ;
+	    		unset($userdata['password']);
+	    		if ($userdata['id']) {
+	    			$id = $userdata['id'];
+	    			unset($userdata['id']);
+	    			$this->user->updateUser($id,$userdata);		
+	    			echo_json(['status'=>'success','message'=>'User Updated Successfully.','saved'=>'true']);
+	    		}else
 	    		if ($this->user->addUser($userdata)) {
 	    			echo_json(['status'=>'success','message'=>'User Added Successfully.','saved'=>'true']);
 	    		}else{
@@ -191,6 +222,39 @@ class Admin extends CI_Controller {
 	    	echo_json(['status'=>'success','message'=>'User Assigned Successfully.','saved'=>'true','reload'=>'true']);
 		}else{
 	    	echo_json(['status'=>'failed','message'=>'Something went wrong.']);
+		}
+	}
+
+	public function popular_destinations(){
+		$data['popular_destination'] = $this->popular_destination->getAll();
+		load_view('popular-destinations',$data,'admin');
+	}
+
+	public function create_destination(){
+		$destination = stripKeyValues($this->input->post());
+		$this->form_validation->set_rules('title', 'Desitnation Title', 'trim|required|strip_tags');
+		$this->form_validation->set_rules('description', 'Desitnation Desitnation', 'trim|required|strip_tags');
+		$destination['image'] = uploadImage($_FILES['image'],'destinations');
+		if ($this->input->server('REQUEST_METHOD') === 'POST' && $this->form_validation->run() == TRUE) {
+			if (!empty($destination['id'])) {
+				$this->popular_destination->update($destination);
+				echo_json(['status'=>'success','saved'=>'true','message'=>'Destination updated successfully.','reload'=>'true']);
+			}else if ($this->popular_destination->add($destination)) {
+				echo_json(['status'=>'success','saved'=>'true','message'=>'Destination Submitted successfully.','reload'=>'true']);
+			}else{
+				echo_json(['status'=>'failure','message'=>'Something went wrong.']);
+			}
+		}else{
+			echo_json(['messages'=>validation_errors(),'status'=>'failure']);
+		}
+	}
+
+	public function delete_destination(){
+		extract($this->input->post());
+		if ($this->destination->delete($id)) {
+			echo_json(['status'=>'success','saved'=>'true','message'=>'destination deleted successfully.']);
+		}else{
+			echo_json(['status'=>'failure']);
 		}
 	}
 }

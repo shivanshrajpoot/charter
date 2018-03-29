@@ -23,7 +23,7 @@
 								<div class="tab-content">
 									<div class="tab-content-inner active" data-content="signup">
 										<h3>Search Your Trip</h3>
-										<?php echo form_open('',['role'=>"submit-search"]); ?>
+										<?php echo form_open('',['role'=>"submit-search",'id'=>'search_form']); ?>
 											<div class="row form-group">
 												<div class="col-md-6">
 													<label for="from">From</label>
@@ -94,109 +94,43 @@
 	</div>
 </header>
 
+<?php if (@$popular_destinations): ?>
 <div class="gtco-section">
 	<div class="gtco-container">
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2 text-center gtco-heading">
-				<h2>Most Popular Destination</h2>
-				<p>Dignissimos asperiores vitae velit veniam totam fuga molestias accusamus alias autem provident. Odit ab aliquam dolor eius.</p>
+				<h2>Most Popular Destinations</h2>
+				<p><?php echo @POPULAR_DESTINATION_TEXT; ?></p>
 			</div>
 		</div>
 		<div class="row">
-
-			<div class="col-lg-4 col-md-4 col-sm-6">
-				<a href="<?php _url('assets/images/img_1.jpg');?>" class="fh5co-card-item image-popup">
-					<figure>
-						<div class="overlay"><i class="ti-plus"></i></div>
-						<img src="<?php _url('assets/images/img_1.jpg');?>" alt="Image" class="img-responsive">
-					</figure>
-					<div class="fh5co-text">
-						<h2>New York, USA</h2>
-						<p>Far far away, behind the word mountains, far from the countries Vokalia..</p>
-						<p><span class="btn btn-primary">Schedule a Trip</span></p>
+				<?php foreach ($popular_destinations as $key => $destination): ?>
+					<div class="col-lg-4 col-md-4 col-sm-6">
+						<a href="<?php _url('uploads/destinations/'.$destination['image']);?>" class="fh5co-card-item image-popup">
+							<figure>
+								<div class="overlay"><i class="ti-plus"></i></div>
+								<img src="<?php _url('uploads/destinations/'.$destination['image']);?>" alt="Image" class="img-responsive">
+							</figure>
+							<div class="fh5co-text">
+								<h2><?php echo $destination['title']; ?></h2>
+								<p><?php echo $destination['description']; ?></p>
+								<p><span class="btn btn-primary">Schedule a Trip</span></p>
+							</div>
+						</a>
 					</div>
-				</a>
-			</div>
-			<div class="col-lg-4 col-md-4 col-sm-6">
-				<a href="<?php _url('assets/images/img_2.jpg');?>" class="fh5co-card-item image-popup">
-					<figure>
-						<div class="overlay"><i class="ti-plus"></i></div>
-						<img src="<?php _url('assets/images/img_2.jpg');?>" alt="Image" class="img-responsive">
-					</figure>
-					<div class="fh5co-text">
-						<h2>Seoul, South Korea</h2>
-						<p>Far far away, behind the word mountains, far from the countries Vokalia..</p>
-						<p><span class="btn btn-primary">Schedule a Trip</span></p>
-					</div>
-				</a>
-			</div>
-			<div class="col-lg-4 col-md-4 col-sm-6">
-				<a href="<?php _url('assets/images/img_3.jpg');?>" class="fh5co-card-item image-popup">
-					<figure>
-						<div class="overlay"><i class="ti-plus"></i></div>
-						<img src="<?php _url('assets/images/img_3.jpg');?>" alt="Image" class="img-responsive">
-					</figure>
-					<div class="fh5co-text">
-						<h2>Paris, France</h2>
-						<p>Far far away, behind the word mountains, far from the countries Vokalia..</p>
-						<p><span class="btn btn-primary">Schedule a Trip</span></p>
-					</div>
-				</a>
-			</div>
-
-
-			<div class="col-lg-4 col-md-4 col-sm-6">
-				<a href="<?php _url('assets/images/img_4.jpg');?>" class="fh5co-card-item image-popup">
-					<figure>
-						<div class="overlay"><i class="ti-plus"></i></div>
-						<img src="<?php _url('assets/images/img_4.jpg');?>" alt="Image" class="img-responsive">
-					</figure>
-					<div class="fh5co-text">
-						<h2>Sydney, Australia</h2>
-						<p>Far far away, behind the word mountains, far from the countries Vokalia..</p>
-						<p><span class="btn btn-primary">Schedule a Trip</span></p>
-					</div>
-				</a>
-			</div>
-
-			<div class="col-lg-4 col-md-4 col-sm-6">
-				<a href="<?php _url('assets/images/img_5.jpg');?>" class="fh5co-card-item image-popup">
-					<figure>
-						<div class="overlay"><i class="ti-plus"></i></div>
-						<img src="<?php _url('assets/images/img_5.jpg');?>" alt="Image" class="img-responsive">
-					</figure>
-					<div class="fh5co-text">
-						<h2>Greece, Europe</h2>
-						<p>Far far away, behind the word mountains, far from the countries Vokalia..</p>
-						<p><span class="btn btn-primary">Schedule a Trip</span></p>
-					</div>
-				</a>
-			</div>
-
-			<div class="col-lg-4 col-md-4 col-sm-6">
-				<a href="<?php _url('assets/images/img_6.jpg');?>" class="fh5co-card-item image-popup">
-					<figure>
-						<div class="overlay"><i class="ti-plus"></i></div>
-						<img src="<?php _url('assets/images/img_6.jpg');?>" alt="Image" class="img-responsive">
-					</figure>
-					<div class="fh5co-text">
-						<h2>Spain, Europe</h2>
-						<p>Far far away, behind the word mountains, far from the countries Vokalia..</p>
-						<p><span class="btn btn-primary">Schedule a Trip</span></p>
-					</div>
-				</a>
-			</div>
+				<?php endforeach ?>
 
 		</div>
 	</div>
 </div>
+<?php endif ?>
 
 <div id="gtco-features">
 	<div class="gtco-container">
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2 text-center gtco-heading animate-box">
 				<h2>How It Works</h2>
-				<p>Dignissimos asperiores vitae velit veniam totam fuga molestias accusamus alias autem provident. Odit ab aliquam dolor eius.</p>
+				<p><?php echo @HOW_IT_WORKS; ?></p>
 			</div>
 		</div>
 		<div class="row">
@@ -205,8 +139,7 @@
 					<span class="icon">
 						<i>1</i>
 					</span>
-					<h3>Lorem ipsum dolor sit amet</h3>
-					<p>Dignissimos asperiores vitae velit veniam totam fuga molestias accusamus alias autem provident. Odit ab aliquam dolor eius.</p>
+					<h3><?php echo @HOW_IT_WORKS_1; ?></h3>
 				</div>
 			</div>
 			<div class="col-md-4 col-sm-6">
@@ -214,8 +147,7 @@
 					<span class="icon">
 						<i>2</i>
 					</span>
-					<h3>Consectetur adipisicing elit</h3>
-					<p>Dignissimos asperiores vitae velit veniam totam fuga molestias accusamus alias autem provident. Odit ab aliquam dolor eius.</p>
+					<h3><?php echo @HOW_IT_WORKS_2; ?></h3>
 				</div>
 			</div>
 			<div class="col-md-4 col-sm-6">
@@ -223,8 +155,7 @@
 					<span class="icon">
 						<i>3</i>
 					</span>
-					<h3>Dignissimos asperiores vitae</h3>
-					<p>Dignissimos asperiores vitae velit veniam totam fuga molestias accusamus alias autem provident. Odit ab aliquam dolor eius.</p>
+					<h3><?php echo @HOW_IT_WORKS_3; ?></h3>
 				</div>
 			</div>
 			
@@ -239,7 +170,7 @@
 	<div class="gtco-container text-center">
 		<div class="display-t">
 			<div class="display-tc">
-				<h1>We have high quality services that you will surely love!</h1>
+				<h1><?php echo @QUALITY_TEXT; ?></h1>
 			</div>	
 		</div>
 	</div>
@@ -251,7 +182,7 @@
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2 text-center gtco-heading animate-box">
 				<h2>Our Success</h2>
-				<p>Dignissimos asperiores vitae velit veniam totam fuga molestias accusamus alias autem provident. Odit ab aliquam dolor eius.</p>
+				<p><?php echo @OUR_SUCCESS; ?></p>
 			</div>
 		</div>
 
@@ -294,21 +225,33 @@
 	<div class="gtco-container">
 		<div class="row animate-box">
 			<div class="col-md-8 col-md-offset-2 text-center gtco-heading">
-				<h2>Subscribe</h2>
-				<p>Be the first to know about the new templates.</p>
+				<h2>Contact Us</h2>
+				<p>We will never share your email...</p>
 			</div>
 		</div>
 		<div class="row animate-box">
 			<div class="col-md-8 col-md-offset-2">
-				<form class="form-inline">
-					<div class="col-md-6 col-sm-6">
+				<?php echo form_open('',['class'=>"form-group",'id'=>'contact_us_form']); ?>
+					<div class="col-md-4 col-sm-4">
 						<div class="form-group">
 							<label for="email" class="sr-only">Email</label>
-							<input type="email" class="form-control" id="email" placeholder="Your Email">
+							<input required type="email" class="form-control" name="email" id="email" placeholder="Your Email">
+							<?php echo form_error('email','<span class="text-danger">','</span>'); ?>
 						</div>
 					</div>
-					<div class="col-md-6 col-sm-6">
-						<button type="submit" class="btn btn-default btn-block">Subscribe</button>
+					<div class="col-md-4 col-sm-4">
+						<div class="form-group">
+							<label for="message" class="sr-only">Message</label>
+							<textarea required type="text" class="form-control" name="message" id="message" placeholder="Message"></textarea>
+							<?php echo form_error('message','<span class="text-danger">','</span>'); ?>
+						</div>
+					</div>
+					<div class="col-md-4 col-sm-4">
+						<div class="form-group">
+							<label for="send" class="sr-only">Send</label>
+							<input type="hidden" name="contact_us" value="contact_us">
+							<input type="submit" id="send" class="btn btn-default" data-toggle="tooltip" title="Send" value="Send" name="send">
+						</div>
 					</div>
 				</form>
 			</div>
