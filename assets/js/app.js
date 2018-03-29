@@ -160,7 +160,8 @@ $('.edit-user').on('click',function(){
 })
 $('.delete-user').on('click',function(){
     var data = table.row( $(this).parents('tr') ).data();
-    target_id = $(this).data('target');
+    target_id = $(this).data('id');
+    console.log(target_id);
     swal({
         title: 'Are you sure?',
         text: "This item will be deleted.",

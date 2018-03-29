@@ -51,6 +51,16 @@ class Migration_create_requests extends CI_Migration {
 					'type' => 'TIME',
 					'null' => TRUE,
 				),
+				'lat' => array(
+					'type' => 'VARCHAR',
+					'constraint' => '255',
+					'null' => TRUE,
+				),
+				'long' => array(
+					'type' => 'VARCHAR',
+					'constraint' => '255',
+					'null' => TRUE,
+				),
 				'status' => array(
 					'type' => 'ENUM("active", "inactive", "deleted")',
 					'constraint' => "",

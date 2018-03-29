@@ -37,7 +37,7 @@
 									<div class="col-7 d-flex align-items-center">
 										<div class="numbers">
 											<p class="card-category">Users</p>
-											<h4 class="card-title"><?php echo $count_info['users'] ?></h4>
+											<h4 class="card-title"><?php echo $count_info['users']-1; ?></h4>
 										</div>
 									</div>
 								</div>

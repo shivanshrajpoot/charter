@@ -44,7 +44,7 @@
 				<a href="<?php _url('admin/users')?>">
 					<i class="la la-table"></i>
 					<p>Manage Users</p>
-					<span class="badge badge-count"><?php echo $count_info['users'] ?></span>
+					<span class="badge badge-count"><?php echo $count_info['users']-1; ?></span>
 				</a>
 			</li>
 			<li class="nav-item <?php echo $this->uri->segment(2)=='requests' ? 'active' :'' ;?>">

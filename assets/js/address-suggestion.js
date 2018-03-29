@@ -29,24 +29,24 @@ function initAutocomplete(el) {
 
 function fillInAddress() {
   // Get the place details from the autocomplete object.
-  var place = autocomplete.getPlace();
+  // var place = autocomplete.getPlace();
 
-  for (var component in componentForm) {
+  // for (var component in componentForm) {
     /*document.getElementById(component).value = '';
     document.getElementById(component).disabled = false;*/
-    $('#' + component).val('');
-    $('#' + component).attr('disabled', false);
-  }
+    // $('#' + component).val('');
+    // $('#' + component).attr('disabled', false);
+  // }
 
   // Get each component of the address from the place details
   // and fill the corresponding field on the form.
-  for (var i = 0; i < place.address_components.length; i++) {
+  /*for (var i = 0; i < place.address_components.length; i++) {
     var addressType = place.address_components[i].types[0];
     if (componentForm[addressType]) {
       var val = place.address_components[i][componentForm[addressType]];
       document.getElementById(addressType).value = val;
     }
-  }
+  }*/
 }
 
 // Bias the autocomplete object to the user's geographical location,
@@ -55,8 +55,10 @@ function geolocate(el) {
   initAutocomplete(el)
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
-      $('input[name="latitude"]').val(position.coords.latitude);
-      $('input[name="longitude"]').val(position.coords.longitude);
+      if ($(el).attr('name')=='from') {
+        $('#lat').val(position.coords.latitude);
+        $('#long').val(position.coords.longitude);
+      }
       var geolocation = {
         lat: position.coords.latitude,
         lng: position.coords.longitude

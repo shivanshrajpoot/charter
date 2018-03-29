@@ -23,6 +23,10 @@ class Admin extends CI_Controller {
 								'Popular_destination_model'=>'popular_destination',
 							]);
 		$this->user_session = $this->session->userdata('user');
+		if ($this->user_session['type']!='1') {
+			$this->session->unset_userdata('user');
+			redirect();
+		}
 	}
 
 	public function dashboard(){
@@ -149,18 +153,27 @@ class Admin extends CI_Controller {
 
 	public function create_user(){
 		if ($this->input->server('REQUEST_METHOD') === 'POST') {
-			$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|strip_tags|is_unique[users.email]');
-			$this->form_validation->set_rules('first_name', 'First Name', 'trim|required|strip_tags|max_length[25]');
-			$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|strip_tags|max_length[25]');
-			$this->form_validation->set_rules('gender', 'Gender', 'trim|required|strip_tags');
+			$this->form_validation->set_rules('email', 'Email', 'trim|valid_email|strip_tags');
+			$this->form_validation->set_rules('first_name', 'First Name', 'trim|strip_tags|max_length[25]');
+			$this->form_validation->set_rules('last_name', 'Last Name', 'trim|strip_tags|max_length[25]');
+			$this->form_validation->set_rules('gender', 'Gender', 'trim|strip_tags');
 			$this->form_validation->set_rules('contact', 'Contact', 'trim|strip_tags|min_length[8]|max_length[12]');
-			$this->form_validation->set_rules('password', 'Password', 'trim|required|strip_tags|min_length[8]|max_length[25]');
-			$this->form_validation->set_rules('password_conf', 'Password Confirmation', 'trim|required|strip_tags|min_length[8]|max_length[25]|matches[password]');
+			$this->form_validation->set_rules('password', 'Password', 'trim|strip_tags|min_length[8]|max_length[25]');
+			if (!empty($_POST['password'])) {
+				$this->form_validation->set_rules('password_conf', 'Password Confirmation', 'trim|strip_tags|min_length[8]|max_length[25]|matches[password]');
+			}
 			if($this->form_validation->run() == TRUE) {
 	    		$userdata = array_map('_stripTags_trim',$this->input->post());
 	    		unset($userdata['password_conf']);
 	    		$userdata['uuid'] = guid();
-	    		$userdata['password'] = __hash_password($userdata['password']);
+	    		$userdata['password'] = !empty($userdata['']) ? __hash_password($userdata['password']) : '' ;
+	    		unset($userdata['password']);
+	    		if ($userdata['id']) {
+	    			$id = $userdata['id'];
+	    			unset($userdata['id']);
+	    			$this->user->updateUser($id,$userdata);		
+	    			echo_json(['status'=>'success','message'=>'User Updated Successfully.','saved'=>'true']);
+	    		}else
 	    		if ($this->user->addUser($userdata)) {
 
 	    			echo_json(['status'=>'success','message'=>'User Added Successfully.','saved'=>'true']);

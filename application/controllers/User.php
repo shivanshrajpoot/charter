@@ -20,23 +20,31 @@ class User extends CI_Controller {
 	public function logout(){
 		$this->session->unset_userdata('user');
 		echo_json(['status'=>'success','location'=>base_url()]);
+		redirect();
 	}
 	
 	public function login() {
 		$msg = NULL;
 		$this->form_validation->set_rules('username', 'Username', 'trim|required|strip_tags');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|strip_tags|min_length[8]|max_length[25]|callback_isValidUser');
-		if (($this->input->server('REQUEST_METHOD') === 'POST' && $this->form_validation->run() == TRUE) || $this->user_session6) {
+		if (($this->input->server('REQUEST_METHOD') === 'POST' && $this->form_validation->run() == TRUE) || $this->user_session) {
 			switch ($this->user_session['type']) {
 				case '1':
-					redirect('/dashboard');
+					$url = '/dashboard';
+					$this->session->set_userdata('dashboard_url',$url);
+					redirect($url);
 					break;
 				case '2':
-					redirect('/charter/dashboard');
+					$url = '/charter/dashboard';
+					$this->session->set_userdata('dashboard_url',$url);
+					redirect($url);
 					break;
 				case '3':
+					$url = '/user/dashboard';
+					$this->session->set_userdata('dashboard_url',$url);
+					redirect($url);
 				default:
-					redirect('/user/dashboard');
+					redirect();
 			}
 		} else {
 	    	$this->uri->segment(1) == 'admin' ? load_view('login',['msg'=>$msg],'admin') : load_view('login',['msg'=>$msg],'user',TRUE);
@@ -54,6 +62,10 @@ class User extends CI_Controller {
 				if ($username == 'admin' && $this->uri->segment(1) != 'admin') {
 					return FALSE;
 				}else{
+					if ($user['status'] == 'deleted' || $user['status'] == 'inactive') {
+						$this->form_validation->set_message('isValidUser', 'Your account is '.$user['status'].'.Please contact admin.');
+						return FALSE;
+					}
 	            	$this->session->set_userdata('user',$user);
 	            	$this->user_session = $this->session->userdata('user');
 					return TRUE;
@@ -67,6 +79,9 @@ class User extends CI_Controller {
 	}
 
 	public function profile(){
+		if (!$this->user_session) {
+			redirect('login');
+		}
 		$userdata = $this->user_session;
 		$data['userdata'] = $userdata;
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|strip_tags');
@@ -125,20 +140,23 @@ class User extends CI_Controller {
 				$data = array_merge($data,$userdata);
 				load_view('profile',$data,'charter');
 				break;
-			case '1':
+			case '3':
 			default:
 				$data['requests'] = $this->request->getAllRequests('',['user_id'=>$this->user_session['id']]);
 				$data['count_info']['requests'] = count($data['requests']);
-				load_view('profile',$data);
+				load_view('profile',$data,'user');
 				break;
 		}
 	}
 
 	public function dashboard(){
+		if (!$this->user_session && $user_session != 3) {
+			redirect('login');
+		}
 		$data['requests'] = $this->request->getAllRequests('',['user_id'=>$this->user_session['id']]);
 		$data['count_info']['requests'] = count($data['requests']);
 		$data['userdata'] = $this->user_session;
-		load_view('dashboard',$data);
+		load_view('dashboard',$data,'user');
 	}
 
 	public function forgot_password(){

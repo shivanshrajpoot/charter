@@ -21,9 +21,16 @@ class Charter extends CI_Controller {
 			'Aircrafts_model'=>'aircraft',
 		]);
 		$this->user_session = $this->session->userdata('user');
+		if (!$this->user_session) {
+			redirect('login');
+		}
 	}
 
 	public function dashboard(){
+		if ($this->user_session['type']!='2') {
+			$this->session->unset_userdata('user');
+			redirect('login');
+		}
 		load_view('dashboard',$this->user_session,'charter');
 	}
 
