@@ -43,7 +43,15 @@
 <script src="<?php _url('assets/js/app.js');?>"></script>
 <!-- Datatable -->
 <script src="<?php _url('assets/js/jquery.dataTables.min.js');?>"></script>
+<script src="<?php _url('assets/js/dataTables.bootstrap4.min.js');?>"></script>
 <script src="<?php _url('assets/js/dataTables.buttons.min.js');?>"></script>
+<script src="<?php _url('assets/js/buttons.bootstrap4.min.js');?>"></script>
+<script src="<?php _url('assets/js/jszip.min.js');?>"></script>
+<script src="<?php _url('assets/js/pdfmake.min.js');?>"></script>
+<script src="<?php _url('assets/js/vfs_fonts.js');?>"></script>
+<script src="<?php _url('assets/js/buttons.html5.min.js');?>"></script>
+<script src="<?php _url('assets/js/buttons.print.min.js');?>"></script>
+<script src="<?php _url('assets/js/buttons.colVis.min.js');?>"></script>
 <script src="<?php _url('assets/js/dataTables.select.min.js');?>"></script>
 <script src="<?php _url('assets/js/sweetalert.min.js');?>"></script>
 <script>

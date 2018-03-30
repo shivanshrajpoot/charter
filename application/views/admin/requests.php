@@ -15,17 +15,10 @@
 							</div>
 							<div class="card-body ">
 								<div class="table-responsive">
-									<table class="table">
+									<table class="table" id="requests_table">
 										<thead>
 											<tr>
-												<th>
-													<div class="form-check">
-														<label class="form-check-label">
-															<input class="form-check-input  select-all-checkbox" type="checkbox" data-select="checkbox" data-target=".task-select">
-															<span class="form-check-sign"></span>
-														</label>
-													</div>
-												</th>
+												<th>#</th>
 												<th>From</th>
 												<th>To</th>
 												<th>Departure Date</th>
@@ -37,14 +30,7 @@
 										<tbody>
 											<?php foreach ($requests as $key => $request): ?>
 												<tr>
-													<td>
-														<div class="form-check">
-															<label class="form-check-label">
-																<input class="form-check-input task-select" type="checkbox">
-																<span class="form-check-sign"></span>
-															</label>
-														</div>
-													</td>
+													<td><?php echo $key+1;?></td>
 													<td><?php echo $request['to'];?></td>
 													<td><?php echo $request['from'];?></td>
 													<td><?php echo $request['dep_date'];?></td>

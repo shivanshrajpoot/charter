@@ -17,14 +17,14 @@
 							</div>
 							<div class="card-body">
 								<div class="table-responsive">
-									<table class="table table-hover">
+									<table class="table table-hover" id="destinations_table">
 										<thead>
 											<tr>
 												<th scope="col">#</th>
 												<th scope="col">Name</th>
 												<th scope="col">Image</th>
 												<th scope="col">Description</th>
-												<th scope="col"></th>
+												<th scope="col" class="text-center">Actions</th>
 											</tr>
 										</thead>
 										<tbody>

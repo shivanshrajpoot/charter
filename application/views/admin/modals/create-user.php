@@ -21,12 +21,12 @@
 						</div>
 						<div class="row form-group">
 							<div class="col-md-6">
-								<label class="sr-only" for="name">First Name</label>
-								<input type="text" id="name" name="first_name" class="form-control" placeholder="First name" required autocomplete autofocus maxlength="15" value="<?php echo set_value('first_name'); ?>">
+								<label class="sr-only" for="first_name">First Name</label>
+								<input type="text" id="first_name" name="first_name" class="form-control" placeholder="First name" required autocomplete autofocus maxlength="15" value="<?php echo set_value('first_name'); ?>">
 							</div>
 							<div class="col-md-6">
-								<label class="sr-only" for="name">Last Name</label>
-								<input type="text" id="name" name="last_name" class="form-control" placeholder="Last name" required autocomplete autofocus maxlength="15" value="<?php echo set_value('last_name'); ?>">
+								<label class="sr-only" for="last_name">Last Name</label>
+								<input type="text" id="last_name" name="last_name" class="form-control" placeholder="Last name" required autocomplete autofocus maxlength="15" value="<?php echo set_value('last_name'); ?>">
 							</div>
 						</div>
 						<div class="row form-group">

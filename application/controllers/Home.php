@@ -21,6 +21,7 @@ class Home extends CI_Controller {
 			'Requests_model'	=>	'request',
 			'Admin_model'		=>	'admin',
 			'Quotes_model'		=>	'quote',
+			'Contact_us_model'	=>	'contact_us',
 			'Popular_destination_model'=>'popular_destination',
 		]);
 		$this->user_session = $this->session->userdata('user');
@@ -28,22 +29,26 @@ class Home extends CI_Controller {
 	
 	public function index() {
 		$data = [];
+		$send_mail = FALSE;
 		$data['popular_destinations'] = $this->popular_destination->getAll();
 		if ($this->user_session) {
 			$data['quotes_url'] = 'all-quotes/'.base64_encode($this->user_session['id']);
 		}
 		if ($this->input->server('REQUEST_METHOD') === 'POST') {
-			if ($this->input->post('contact_us') == 'contact_us') {
-		    	$post_data = stripKeyValues($this->input->post());
 			    $post_data = stripKeyValues($this->input->post());
 				if ($this->input->post('contact_us') == 'contact_us') {
 					extract(array_filter($post_data));
 					if (!empty($email) && !empty($message)) {
-						__send_email($email,'contact_reply',['message'=>$message,'link'=>base_url()],'');
-						__send_email(ADMIN_EMAIL,'contact_us',['message'=>$message,'link'=>base_url()],'');
-						$success_data['title'] = 'Success'; 
-						$success_data['message'] = 'Thank You For Contacting Us.We will get back to you soon...'; 
-						$success_data['type'] = 'success'; 
+						if ($this->contact_us->add(['email'=>$email,'message'=>$message])) {
+							__send_email($email,'contact_us',['message'=>$message,'link'=>base_url()],'');
+							$success_data['title'] = 'Success'; 
+							$success_data['message'] = 'Thank You For Contacting Us.We will get back to you soon...'; 
+							$success_data['type'] = 'success'; 
+						}else{
+							$success_data['title'] = 'Failed'; 
+							$success_data['message'] = 'Something went wrong.Please try again...'; 
+							$success_data['type'] = 'error';
+						}
 						$this->session->set_flashdata('success_page',$success_data);
 						redirect('success');
 					}
@@ -60,18 +65,47 @@ class Home extends CI_Controller {
 						redirect('login');
 					}
 					if ($this->form_validation->run() == TRUE) {
-						unset($post_data['return']);
-						$temp_id = $this->request->add($post_data);
-						foreach ($this->charter->getAllCharters('email,name') as $key => $charter) {
-							__send_email($charter['email'],'charter_notify',$charter,stripKeyValues($post_data));
+						if (empty($post_data['from_lat']) || empty($post_data['from_long']) || empty($post_data['to_lat']) || empty($post_data['to_long'])) {
+							redirect();
+						}else{
+							unset($post_data['return']);
+							$post_data['user_id'] = $this->user_session['id'];
+							$post_data['dep_time'] = date("H:i", strtotime($post_data['dep_time']));
+							$post_data['ret_time'] = $post_data['ret_time'] ? date("H:i", strtotime($post_data['ret_time'])) : '';
+							$post_data['dep_date'] = date('Y-m-d',strtotime($post_data['dep_date']));
+							if (!empty($post_data['ret_date'])) {
+								$post_data['ret_date'] = date('Y-m-d',strtotime($post_data['ret_date']));
+							}else{
+								unset($post_data['ret_time']);
+							}
+							$temp_id = $this->request->add($post_data);
+							$send_mail = TRUE;
+							$this->session->set_flashdata('temp_id',$temp_id);
+							$data['show_loader'] = 'true';
 						}
-						$this->session->set_flashdata('temp_id',$temp_id);
-						$data['show_loader'] = 'true';
 					}
+				}
+		}
+		load_view('home',$data,'user',TRUE);
+		if ($send_mail) {
+			$distanceInKmBetweenEarthCoordinates = function ($lat1, $lon1, $lat2, $lon2) {
+			  $earthRadiusKm = 6371;
+			  $dLat = deg2rad($lat2-$lat1);
+			  $dLon = deg2rad($lon2-$lon1);
+			  $lat1 = deg2rad($lat1);
+			  $lat2 = deg2rad($lat2);
+
+			  $a = sin($dLat/2) * sin($dLat/2) + sin($dLon/2) * sin($dLon/2) * cos($lat1) * cos($lat2); 
+			  $c = 2 * atan2(sqrt($a), sqrt(1-$a));
+			  return $earthRadiusKm * $c;
+			};
+			foreach ($this->charter->getAllCharters('email,name,lat,long') as $key => $charter) {
+				$distance  = $distanceInKmBetweenEarthCoordinates($post_data['from_lat'],$post_data['from_long'],$charter['lat'],$charter['long']);
+				if ($distance <= CHARTER_MAIL_RADIUS) {
+					__send_email($charter['email'],'charter_notify',$charter,stripKeyValues($post_data));
 				}
 			}
 		}
-		load_view('home',$data,'user',TRUE);
 	}
 
 	public function register() {

@@ -28,8 +28,10 @@
 												<div class="col-md-6">
 													<label for="from">From</label>
 													<input type="text" onfocus="geolocate(this)" id="autocomplete" name="from" class="form-control" value="<?php echo set_value('from'); ?>">
-													<input type="hidden" id="lat" name="lat" value="">
-													<input type="hidden" id="long" name="long" value="">
+													<input type="hidden" id="from_lat" name="from_lat" value="">
+													<input type="hidden" id="from_long" name="from_long" value="">
+													<input type="hidden" id="to_lat" name="to_lat" value="">
+													<input type="hidden" id="to_long" name="to_long" value="">
 													<?php echo form_error('from','<span class="text-danger">','</span>'); ?>
 												</div>
 												<div class="col-md-6">

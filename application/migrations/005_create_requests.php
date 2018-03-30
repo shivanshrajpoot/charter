@@ -51,12 +51,22 @@ class Migration_create_requests extends CI_Migration {
 					'type' => 'TIME',
 					'null' => TRUE,
 				),
-				'lat' => array(
+				'dep_lat' => array(
 					'type' => 'VARCHAR',
 					'constraint' => '255',
 					'null' => TRUE,
 				),
-				'long' => array(
+				'dep_long' => array(
+					'type' => 'VARCHAR',
+					'constraint' => '255',
+					'null' => TRUE,
+				),
+				'ret_lat' => array(
+					'type' => 'VARCHAR',
+					'constraint' => '255',
+					'null' => TRUE,
+				),
+				'ret_long' => array(
 					'type' => 'VARCHAR',
 					'constraint' => '255',
 					'null' => TRUE,

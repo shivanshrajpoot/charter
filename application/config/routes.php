@@ -79,6 +79,8 @@ $route['search'] 						= 'home/search';
 $route['all-quotes/(:any)'] 			= 'home/all_quotes/$1';
 $route['view-quote/(:any)'] 			= 'home/view_quote/$1';
 $route['user/dashboard'] 				= 'user/dashboard';
+$route['user/view-request/(:any)'] 		= 'user/view_reqeust/$1';
+$route['user/delete-request'] 			= 'user/delete_reqeust';
 /**
  * Frontend Routes
  */
@@ -103,6 +105,9 @@ $route['admin/static-content'] 			= 'admin/static_content';
 $route['admin/aircrafts'] 				= 'admin/aircrafts';
 $route['admin/assign-user'] 			= 'admin/assign_user';
 $route['admin/popular-destinations']	= 'admin/popular_destinations';
+$route['admin/contact-us']				= 'admin/contact_us';
+$route['admin/delete-contact-us']		= 'admin/delete_contact_us';
+$route['admin/reply-contact-us/(:any)']	= 'admin/reply_contact_us/$1';
 /**
  * Admin Routes
  */

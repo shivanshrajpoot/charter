@@ -13,51 +13,67 @@ $(function(){
  */
     _table = $('.table')
     if (_table.length > 0) {
-        table = $('.table').DataTable()
-    }
-    $('.sidebar_link .nav-item').on('click',function(){
-        alert()
-        $('.sidebar_link .nav-item').each(function(){
-            $(this).toggleClass('active');
+        table_id = $('.table').attr('id')
+        table = $('#'+table_id+'').DataTable({
+            dom: 'Bfrtip',
+            lengthChange: false,
+            buttons: [ 'copy', 'excel', 'pdf', 'colvis' ]
         })
-    })
+        console.log(table);
+        table.buttons().container().appendTo( '#'+table_id+' .col-md-6:eq(0)' );
+    }
 })
 
 $('.hasTimepicker').wickedpicker();
 $('.delete-charter').on('click',function(){
     var data = table.row( $(this).parents('tr') ).data();
     target_id = $(this).data('target');
-    $.ajax({
-        url: 'delete-charter', 
-         data: {id:target_id,},
-         cache: false, 
-         type: 'POST', 
-         dataType: 'json',
-         success: function($response){
-            if ($response.success="success") {
-                swal({
-                    title: $response.message,
-                    text: "Success",
-                    type: 'success',
-                    showCancelButton: false,
-                    confirmButtonColor: '#3085d6',
-                    closeOnEsc: false,
-                    allowOutsideClick:false,
-                    cancelButtonColor: '#d33',
-                    button: 'Ok',
-                    timer: 1000
-                });
-                setTimeout(function(){
-                    location.reload()
-                },1000)
-            }
-         }
-    });
+    swal({
+        title: 'Are you sure?',
+        text: "This item will be deleted.",
+        icon: 'warning',
+        button: 'Ok',
+        closeOnEsc: false,
+        allowOutsideClick:false,
+    }).then(function (result) {
+        $.ajax({
+            url: 'delete-charter', 
+             data: {id:target_id,},
+             cache: false, 
+             type: 'POST', 
+             dataType: 'json',
+             success: function($response){
+                if ($response.success="success") {
+                    swal({
+                        title: $response.message,
+                        text: "Success",
+                        type: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        closeOnEsc: false,
+                        allowOutsideClick:false,
+                        cancelButtonColor: '#d33',
+                        button: 'Ok',
+                        timer: 1000
+                    });
+                    setTimeout(function(){
+                        location.reload()
+                    },1000)
+                }
+             }
+        });
+    })
 })
 $('.assign-charter').on('click',function(){
     target_id = $(this).data('target');
     var modal = $('#assignUser');
     modal.modal('show')
+    $('<input>').attr({
+        "type": 'hidden',
+        "id": 'target_id',
+        "name": 'id',
+        "value":target_id
+    }).appendTo('form');
 })
 $('.edit-charter').on('click',function(){
     var data = table.row( $(this).parents('tr') ).data();
@@ -171,32 +187,34 @@ $('.delete-user').on('click',function(){
         closeOnEsc: false,
         allowOutsideClick:false,
     }).then(function (result) {
-        $.ajax({
-            url: 'delete-user', 
-             data: {id:target_id,},
-             cache: false, 
-             type: 'POST', 
-             dataType: 'json',
-             success: function($response){
-                if ($response.success="success") {
-                    swal({
-                        title: $response.message,
-                        text: "Success",
-                        type: 'success',
-                        showCancelButton: false,
-                        confirmButtonColor: '#3085d6',
-                        closeOnEsc: false,
-                        allowOutsideClick:false,
-                        cancelButtonColor: '#d33',
-                        button: 'Ok',
-                        timer: 1000
-                    });
-                    setTimeout(function(){
-                        location.reload()
-                    },1000)
-                }
-             }
-        });
+        if (result) {
+            $.ajax({
+                url: 'delete-user', 
+                 data: {id:target_id,},
+                 cache: false, 
+                 type: 'POST', 
+                 dataType: 'json',
+                 success: function($response){
+                    if ($response.success="success") {
+                        swal({
+                            title: $response.message,
+                            text: "Success",
+                            type: 'success',
+                            showCancelButton: false,
+                            confirmButtonColor: '#3085d6',
+                            closeOnEsc: false,
+                            allowOutsideClick:false,
+                            cancelButtonColor: '#d33',
+                            button: 'Ok',
+                            timer: 1000
+                        });
+                        setTimeout(function(){
+                            location.reload()
+                        },1000)
+                    }
+                 }
+            });
+        }
     })
 })
 $('.delete-quote').on('click',function(){
@@ -300,6 +318,90 @@ $('.delete-destination').on('click',function(){
         });
     })
 })
+
+$('.delete-contact-us').on('click',function(){
+    target_id = $(this).data('target');
+    swal({
+        title: 'Are you sure?',
+        text: "This item will be deleted.",
+        icon: 'warning',
+        confirmButtonColor: '#3085d6',
+        button: 'Ok',
+        closeOnEsc: false,
+        allowOutsideClick:false,
+    }).then(function (result) {
+        $.ajax({
+            url: 'delete-contact-us', 
+             data: {id:target_id,},
+             cache: false, 
+             type: 'POST', 
+             dataType: 'json',
+             success: function($response){
+                if ($response.success="success") {
+                    swal({
+                        title: $response.message,
+                        text: "Success",
+                        type: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        closeOnEsc: false,
+                        allowOutsideClick:false,
+                        cancelButtonColor: '#d33',
+                        button: 'Ok',
+                        timer: 1000
+                    });
+                    setTimeout(function(){
+                        location.reload()
+                    },1000)
+                }
+             }
+        });
+    })
+})
+
+
+$('.delete-request').on('click',function(){
+    target_id = $(this).data('target');
+    swal({
+        title: 'Are you sure?',
+        text: "This item will be deleted.",
+        icon: 'warning',
+        confirmButtonColor: '#3085d6',
+        button: 'Ok',
+        closeOnEsc: false,
+        allowOutsideClick:false,
+    }).then(function (result) {
+        $.ajax({
+            url: 'delete-request', 
+             data: {id:target_id},
+             cache: false, 
+             type: 'POST', 
+             dataType: 'json',
+             success: function($response){
+            if ($response.success="success") {
+                    swal({
+                        title: $response.message,
+                        text: "Success",
+                        type: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        closeOnEsc: false,
+                        allowOutsideClick:false,
+                        cancelButtonColor: '#d33',
+                        button: 'Ok',
+                        timer: 1000
+                    });
+                    setTimeout(function(){
+                        location.reload()
+                    },1000)
+                }
+             }
+        });
+    })
+})
+
+
+
 
 
 
@@ -500,7 +602,6 @@ $( ".hasDatepicker" ).datepicker({
 });
 function logOut(el){
     $url = $(el).data('url')
-    console.log($url)
     $.ajax({
         url: $url, 
         dataType: 'json',

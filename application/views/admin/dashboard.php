@@ -17,7 +17,7 @@
 									</div>
 									<div class="col-7 d-flex align-items-center">
 										<div class="numbers">
-											<p class="card-category">Reuests</p>
+											<p class="card-category">Requests</p>
 											<h4 class="card-title"><?php echo $count_info['requests'] ?></h4>
 										</div>
 									</div>

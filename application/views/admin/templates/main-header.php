@@ -12,12 +12,12 @@
 		<div class="container-fluid">
 			<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
 				<li class="nav-item dropdown">
-					<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false"> <img src="<?php _url('assets/img/profile.jpg');?>" alt="user-img" width="36" class="img-circle"><span ><?php echo $user['first_name'].' '.$user['last_name']; ?></span>
+					<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false"> <img src="<?php _url('assets/img/user.png');?>" alt="user-img" width="36" class="img-circle"><span ><?php echo $user['first_name'].' '.$user['last_name']; ?></span>
 					</a>
 					<ul class="dropdown-menu dropdown-user">
 						<li>
 							<div class="user-box">
-								<div class="u-img"><img src="<?php _url('assets/img/profile.jpg');?>" alt="user"></div>
+								<div class="u-img"><img src="<?php _url('assets/img/user.png');?>" alt="user"></div>
 								<div class="u-text">
 									<h4><?php echo $user['first_name'].' '.$user['last_name']; ?></h4>
 									<p class="text-muted"><?php echo $user['email']; ?></p><a href="<?php _url('my-profile'); ?>" class="btn btn-rounded btn-danger btn-sm">View Profile</a>
@@ -26,7 +26,7 @@
 						</li>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="<?php _url('my-profile'); ?>"><i class="ti-user"></i> My Profile</a>
-						<a class="dropdown-item" data-url="<?php _url('logout'); ?>" href="javascript:void" onclick="return logOut(this);"><i class="fa fa-power-off"></i> Logout</a>
+						<a class="dropdown-item" href="" data-url="<?php _url('logout'); ?>" onclick="return logOut(this);"><i class="fa fa-power-off"></i> Logout</a>
 					</ul>
 						<!-- /.dropdown-user -->
 				</li>

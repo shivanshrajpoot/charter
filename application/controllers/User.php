@@ -19,8 +19,7 @@ class User extends CI_Controller {
 
 	public function logout(){
 		$this->session->unset_userdata('user');
-		echo_json(['status'=>'success','location'=>base_url()]);
-		redirect();
+		echo_json(['status'=>'success','location'=>base_url(),'reload'=>'true']);
 	}
 	
 	public function login() {
@@ -153,8 +152,9 @@ class User extends CI_Controller {
 		if (!$this->user_session && $user_session != 3) {
 			redirect('login');
 		}
-		$data['requests'] = $this->request->getAllRequests('',['user_id'=>$this->user_session['id']]);
-		$data['count_info']['requests'] = count($data['requests']);
+		$data['requests'] = $this->request->getAllRequests('requests.*, DATE_FORMAT(dep_date,"%d %M %Y") AS dep_date',['user_id'=>$this->user_session['id']]);
+		$this->user_session['requests'] = count($data['requests']);
+		$this->session->set_userdata('request_count',$this->user_session['requests']);
 		$data['userdata'] = $this->user_session;
 		load_view('dashboard',$data,'user');
 	}
@@ -218,6 +218,40 @@ class User extends CI_Controller {
 			load_view('blank',$data,'user',TRUE);
 		}else{
 			redirect();
+		}
+	}
+
+	public function view_reqeust($id){
+		$id = base64_decode($id);
+		$data['userdata'] = $this->user_session;
+		$this->user_session = $this->session->userdata('request_count');
+		$data['request'] = $this->request->getAllRequests('requests.*,DATE_FORMAT(dep_date,"%d %M %Y") AS dep_date',['id'=>$id])[0];
+		/**
+		 * Map
+		 */
+		$this->load->library('googlemaps');
+
+		$config['center'] = 'auto';
+		$config['zoom'] = 'auto';
+		$config['directions'] = TRUE;
+		$config['directionsMode'] = 'TRANSIT';
+		$config['directionsStart'] = $data['request']['from'];
+		$config['directionsEnd'] = $data['request']['to'];
+		$config['directionsDivID'] = 'directionsDiv';
+		$this->googlemaps->initialize($config);
+		$data['map'] = $this->googlemaps->create_map();
+		/**
+		 * Map
+		 */
+		load_view('view-request',$data,'user');
+	}
+
+	public function delete_reqeust(){
+		extract($this->input->post());
+		if ($this->request->delete($id)) {
+			echo_json(['status'=>'success','saved'=>'true','message'=>'Request deleted successfully.','reload'=>'true']);
+		}else{
+			echo_json(['status'=>'failure']);
 		}
 	}
 }

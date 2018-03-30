@@ -29,17 +29,17 @@ Circles.create({
 
 // monthlyChart
 
-Chartist.Pie('#monthlyChart', {
+/*Chartist.Pie('#monthlyChart', {
 	labels: ['50%', '20%', '30%'],
 	series: [50, 20, 30]
 }, {
 	plugins: [
 	Chartist.plugins.tooltip()
 	]
-});
+});*/
 
 // trafficChart
-var chart = new Chartist.Line('#trafficChart', {
+/*var chart = new Chartist.Line('#trafficChart', {
 	labels: [1, 2, 3, 4, 5, 6, 7],
 	series: [
 	[5, 9, 7, 8, 5, 3, 5],
@@ -52,7 +52,7 @@ var chart = new Chartist.Line('#trafficChart', {
 	],
 	low: 0,
 	height: "245px",
-});
+});*/
 
 // salesChart
 var dataSales = {
@@ -85,9 +85,9 @@ var responsiveChartSales = [
 }]
 ];
 
-Chartist.Bar('#salesChart', dataSales, optionChartSales, responsiveChartSales);
+// Chartist.Bar('#salesChart', dataSales, optionChartSales, responsiveChartSales);
 
-$(".mapcontainer").mapael({
+/*$(".mapcontainer").mapael({
 	map : {
 		name : "world_countries",
 		zoom: {
@@ -160,4 +160,4 @@ $(".mapcontainer").mapael({
 					}					
 				}
 			},
-		});
+		});*/

@@ -78,6 +78,13 @@ class CI_Controller {
 		$this->load =& load_class('Loader', 'core');
 		$this->load->initialize();
 		log_message('info', 'Controller Class Initialized');
+		$this->load->model(['Admin_model'=>'admin','Charters_model'=>'charter']);
+		$app_info = $this->admin->get_any_table('config');
+		foreach ($app_info as $key => $value) {
+			$_empty[$value['key']] = $value['value'];
+			$_constant = strtoupper($value['key']);
+			!defined($_constant) ? define($_constant,$value['value']) : '';
+		}
 	}
 
 	// --------------------------------------------------------------------

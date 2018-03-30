@@ -2,13 +2,13 @@
 	<div class="scrollbar-inner sidebar-wrapper">
 		<div class="user">
 			<div class="photo">
-				<img src="<?php _url('assets/img/profile.jpg');?>">
+				<img src="<?php _url('assets/img/user.png');?>">
 			</div>
 			<div class="info">
 				<a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 					<span>
 						<?php echo $userdata['first_name'].' '.$userdata['last_name']; ?>
-						<span class="user-level">Charter</span>
+						<span class="user-level">User</span>
 						<span class="caret"></span>
 					</span>
 				</a>
@@ -30,7 +30,7 @@
 				<a href="<?php _url('user/dashboard')?>">
 					<i class="la la-dashboard"></i>
 					<p>My Requests</p>
-					<span class="badge badge-count"><?php echo $count_info['requests']; ?></span>
+					<span class="badge badge-count"><?php echo $this->user_session['requests']; ?></span>
 				</a>
 			</li>
 		</ul>

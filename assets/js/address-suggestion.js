@@ -24,12 +24,28 @@ function initAutocomplete(el) {
 
   // When the user selects an address from the dropdown, populate the address
   // fields in the form.
-  autocomplete.addListener('place_changed', fillInAddress);
+   if ($(el).attr('name')=='from') {
+        autocomplete.addListener('place_changed', fillInAddressFrom);
+      }else if($(el).attr('name')=='to'){
+        autocomplete.addListener('place_changed', fillInAddressTo);
+      } 
 }
 
-function fillInAddress() {
+function fillInAddressTo() {
+    var place = autocomplete.getPlace();
+    let latitude = place.geometry.location.lat()
+    let longitude =  place.geometry.location.lng()
+    $('#to_lat').val(latitude);
+    $('#to_long').val(longitude);
+}
+
+function fillInAddressFrom() {
   // Get the place details from the autocomplete object.
-  // var place = autocomplete.getPlace();
+  var place = autocomplete.getPlace();
+  let latitude = place.geometry.location.lat()
+  let longitude =  place.geometry.location.lng()
+  $('#from_lat').val(latitude);
+  $('#from_long').val(longitude);
 
   // for (var component in componentForm) {
     /*document.getElementById(component).value = '';
@@ -55,10 +71,15 @@ function geolocate(el) {
   initAutocomplete(el)
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
-      if ($(el).attr('name')=='from') {
-        $('#lat').val(position.coords.latitude);
-        $('#long').val(position.coords.longitude);
-      }
+     /* if ($(el).attr('name')=='from') {
+        console.log('from')
+        $('#from_lat').val(position.coords.latitude);
+        $('#from_long').val(position.coords.longitude);
+      }else if($(el).attr('name')=='to'){
+        console.log('to')
+        $('#to_lat').val(position.coords.latitude);
+        $('#to_long').val(position.coords.longitude);
+      } */
       var geolocation = {
         lat: position.coords.latitude,
         lng: position.coords.longitude

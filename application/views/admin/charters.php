@@ -18,7 +18,7 @@
 							</div>
 							<div class="card-body">
 								<div class="table-responsive">
-									<table class="table table-hover">
+									<table class="table table-hover" id="charters_table">
 										<thead>
 											<tr>
 												<th scope="col">#</th>
@@ -27,7 +27,7 @@
 												<th scope="col">Lattitude</th>
 												<th scope="col">Longitude</th>
 												<th scope="col">Service Area</th>
-												<th scope="col"></th>
+												<th scope="col" class="text-center">Actions</th>
 											</tr>
 										</thead>
 										<tbody>

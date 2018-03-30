@@ -1142,6 +1142,8 @@ public function _update_banner_content($banner_details, $banner_id)
             $value = explode('ch_',$value)[1];
             if ($value != 'migrations') {
                 $_empty[$value] = count($this->db->select('id')->from($value)->get()->result_array());
+            }elseif ($value == 'contact_us') {
+                $_empty[$value] = count($this->db->select('id')->from($value)->where(['status'=>'reply'])->get()->result_array());
             }
         }
         return $_empty;

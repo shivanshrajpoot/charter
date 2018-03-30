@@ -12,13 +12,13 @@
 						<div class="card">
 							<div class="card-header">
 								<button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#createUser">
-									<i class="la la-plus"></i>Create New
+									<i class="la la-user-plus"></i>Create New
 								</button>
 								<div class="card-title">Available Users</div>
 							</div>
 							<div class="card-body">
 								<div class="table-responsive">		
-									<table class="table table-hover">
+									<table class="table table-hover" id="users_table">
 										<thead>
 											<tr>
 												<th scope="col">#</th>
@@ -29,7 +29,7 @@
 												<th scope="col">Gender</th>
 												<th scope="col">User Type</th>
 												<th scope="col">Status</th>
-												<th scope="col"></th>
+												<th scope="col" class="text-center">Actions</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -49,7 +49,7 @@
 														<?php endif ?>
 														<td><?php echo ucfirst($user['status']); ?></td>
 														<td style="text-align: center;">
-															<button type="button" data-target="#submitUser" data-id="<?php echo $user['id']; ?>" class="btn btn-danger delete-user" ><i class="la la-close"></i></button>
+															<button type="button" data-target="#submitUser" data-id="<?php echo $user['id']; ?>" class="btn btn-danger delete-user" ><i class="la la-user-times"></i></button>
 															<button type="button" data-target="#submitUser" data-id="<?php echo $user['id']; ?>" class="btn btn-success edit-user" ><i class="la la-edit"></i></button>
 														</td>
 													</tr>

@@ -9,7 +9,8 @@
 	<meta name="description" content="" />
 	<meta name="keywords" content="" />
 	<meta name="author" content="" />
-
+	<link rel="icon" href="<?php _url('assets/img/favicon.png'); ?>" type="image/x-icon" />
+	<link rel="shortcut icon" href="<?php _url('assets/img/favicon.png'); ?>" type="image/x-icon"/>
   	<!-- Facebook and Twitter integration -->
 	<meta property="og:title" content=""/>
 	<meta property="og:image" content=""/>

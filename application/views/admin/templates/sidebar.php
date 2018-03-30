@@ -2,7 +2,7 @@
 	<div class="scrollbar-inner sidebar-wrapper">
 		<div class="user">
 			<div class="photo">
-				<img src="<?php _url('assets/img/profile.jpg');?>">
+				<img src="<?php _url('assets/img/user.png');?>">
 			</div>
 			<div class="info">
 				<a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
@@ -33,51 +33,58 @@
 					<span class="badge badge-count"></span>
 				</a>
 			</li>
+			<li class="nav-item <?php echo $this->uri->segment(2)=='contact-us' ? 'active' :'' ;?>">
+				<a href="<?php _url('admin/contact-us')?>">
+					<i class="la la-dashboard"></i>
+					<p>Contact Us</p>
+					<span class="badge badge-count"><?php echo $count_info['contact_us'] ?></span>
+				</a>
+			</li>
 			<li class="nav-item <?php echo $this->uri->segment(2)=='charters' ? 'active' :'' ;?>">
 				<a href="<?php _url('admin/charters')?>">
-					<i class="la la-table"></i>
+					<i class="la la-newspaper-o"></i>
 					<p>Manage Charters</p>
 					<span class="badge badge-count"><?php echo $count_info['charters'] ?></span>
 				</a>
 			</li>
 			<li class="nav-item <?php echo $this->uri->segment(2)=='users' ? 'active' :'' ;?>">
 				<a href="<?php _url('admin/users')?>">
-					<i class="la la-table"></i>
+					<i class="la la-users"></i>
 					<p>Manage Users</p>
 					<span class="badge badge-count"><?php echo $count_info['users']-1; ?></span>
 				</a>
 			</li>
 			<li class="nav-item <?php echo $this->uri->segment(2)=='requests' ? 'active' :'' ;?>">
 				<a href="<?php _url('admin/requests')?>">
-					<i class="la la-table"></i>
+					<i class="la la-bar-chart"></i>
 					<p>Requests</p>
 					<span class="badge badge-count"><?php echo $count_info['requests'] ?></span>
 				</a>
 			</li>
 			<li class="nav-item <?php echo $this->uri->segment(2)=='aircrafts' ? 'active' :'' ;?>">
 				<a href="<?php _url('admin/aircrafts')?>">
-					<i class="la la-table"></i>
+					<i class="la la-fighter-jet"></i>
 					<p>Aircrafts</p>
 					<span class="badge badge-count"><?php echo $count_info['aircrafts'] ?></span>
 				</a>
 			</li>
 			<li class="nav-item <?php echo $this->uri->segment(2)=='popular-destinations' ? 'active' :'' ;?>">
 				<a href="<?php _url('admin/popular-destinations')?>">
-					<i class="la la-table"></i>
+					<i class="la la-location-arrow"></i>
 					<p>Popular Destinations</p>
 					<span class="badge badge-count"><?php echo $count_info['config'] ?></span>
 				</a>
 			</li>
 			<li class="nav-item <?php echo $this->uri->segment(2)=='configure' ? 'active' :'' ;?>">
 				<a href="<?php _url('admin/configure')?>">
-					<i class="la la-table"></i>
+					<i class="la la-cog"></i>
 					<p>Configuration</p>
 					<span class="badge badge-count"><?php echo $count_info['config'] ?></span>
 				</a>
 			</li>
 			<li class="nav-item <?php echo $this->uri->segment(2)=='email-templates' ? 'active' :'' ;?>">
 				<a href="<?php _url('admin/email-templates')?>">
-					<i class="la la-table"></i>
+					<i class="la la-envelope"></i>
 					<p>Email Templates</p>
 					<span class="badge badge-count"><?php echo $count_info['email_templates'] ?></span>
 				</a>
@@ -85,7 +92,7 @@
 			</li>
 			<li class="nav-item <?php echo $this->uri->segment(2)=='static-content' ? 'active' :'' ;?>">
 				<a href="<?php _url('admin/static-content')?>">
-					<i class="la la-table"></i>
+					<i class="la la-wrench"></i>
 					<p>Static Content</p>
 				</a>
 			</li>

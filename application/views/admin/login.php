@@ -18,11 +18,6 @@
 					<label for="password">Password</label>
 					<input type="password" class="form-control" id="password" name="password" placeholder="Password">
 				</div>
-				<div class="form-check">
-					<label class="form-check-label">
-					<input class="form-check-input" name="remember_me" type="checkbox" value="true">
-					<span class="form-check-sign">Keep me logged in</span>
-				</label>
 				</div>
 				</div>
 				<div class="card-action">

@@ -13,17 +13,10 @@
 								<p class="card-category">Please review requests as per requirement...</p>
 							</div>
 							<div class="card-body ">
-								<table class="table">
+								<table class="table" id="request_table">
 									<thead>
 										<tr>
-											<th>
-												<div class="form-check">
-													<label class="form-check-label">
-														<input class="form-check-input  select-all-checkbox" type="checkbox" data-select="checkbox" data-target=".task-select">
-														<span class="form-check-sign"></span>
-													</label>
-												</div>
-											</th>
+											<th>#</th>
 											<th>From</th>
 											<th>To</th>
 											<th>Departure Date</th>
@@ -35,14 +28,7 @@
 									<tbody>
 										<?php foreach ($requests as $key => $request): ?>
 											<tr>
-												<td>
-													<div class="form-check">
-														<label class="form-check-label">
-															<input class="form-check-input task-select" type="checkbox">
-															<span class="form-check-sign"></span>
-														</label>
-													</div>
-												</td>
+												<td><?php echo $key+1;?></td>
 												<td><?php echo $request['to'];?></td>
 												<td><?php echo $request['from'];?></td>
 												<td><?php echo $request['dep_date'];?></td>
@@ -50,15 +36,12 @@
 												<td><?php echo $request['no_of_pass'];?></td>
 												<td class="td-actions text-right">
 													<div class="form-button-action">
-														<?php if ($request['is_requested']): ?>
-															<button type="button" class="btn btn-outline-warning" disabled>
-																Already Submitted
+															<a class="btn btn-info" href="<?php _url('user/view-request/'.base64_encode($request['id'])); ?>">
+																<i class="la la-eye"></i>
+															</a>
+															<button type="button" class="btn btn-danger delete-request" data-target="<?php echo $request['id']; ?>" >
+																<i class="la la-close"></i>
 															</button>
-														<?php else: ?>	
-															<button data-id="<?php echo $request['id'];?>" type="button" data-toggle="modal" data-target="#submitPrice" class="btn btn-primary">
-																Submit Price
-															</button>
-														<?php endif ?>
 													</div>
 												</td>
 											</tr>

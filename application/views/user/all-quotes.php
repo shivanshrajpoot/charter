@@ -49,6 +49,11 @@
 
 		</div>
 		<div class="row">
+			<div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+				<h2>Quotes For You...</h2>
+			</div>
+		</div>
+		<div class="row">
 			<?php if (!empty($quotes)): ?>
 				<?php foreach ($quotes as $key => $quote): ?>
 					<div class="col-lg-4 col-md-4 col-sm-6">

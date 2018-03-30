@@ -6671,4 +6671,8 @@ body {
   }
 }
 
+.form-button-action button, .form-button-action a {
+  margin:5px;
+}
+
 /*# sourceMappingURL=ready.css.map */

@@ -20,6 +20,7 @@ class Admin extends CI_Controller {
 								'Admin_model'	=>'admin',
 								'Requests_model'=>'request',
 								'Aircrafts_model'=>'aircraft',
+								'Contact_us_model'=>'contact_us',
 								'Popular_destination_model'=>'popular_destination',
 							]);
 		$this->user_session = $this->session->userdata('user');
@@ -64,7 +65,7 @@ class Admin extends CI_Controller {
 	public function delete_charter(){
 		extract($this->input->post());
 		if ($this->charter->deleteCharter($id)) {
-			echo_json(['status'=>'success','saved'=>'true','message'=>'Charter deleted successfully.']);
+			echo_json(['status'=>'success','saved'=>'true','message'=>'Charter deleted successfully.','reload'=>'true']);
 		}else{
 			echo_json(['status'=>'failure']);
 		}
@@ -73,7 +74,7 @@ class Admin extends CI_Controller {
 	public function delete_user(){
 		extract($this->input->post());
 		if ($this->user->deleteUser($id)) {
-			echo_json(['status'=>'success','saved'=>'true','message'=>'User deleted successfully.']);
+			echo_json(['status'=>'success','saved'=>'true','message'=>'User deleted successfully.','reload'=>'true']);
 		}else{
 			echo_json(['status'=>'failure']);
 		}
@@ -236,7 +237,7 @@ class Admin extends CI_Controller {
 	public function create_destination(){
 		$destination = stripKeyValues($this->input->post());
 		$this->form_validation->set_rules('title', 'Desitnation Title', 'trim|required|strip_tags');
-		$this->form_validation->set_rules('description', 'Desitnation Desitnation', 'trim|required|strip_tags');
+		$this->form_validation->set_rules('description', 'Desitnation Description', 'trim|required|strip_tags');
 		$destination['image'] = uploadImage($_FILES['image'],'destinations');
 		if ($this->input->server('REQUEST_METHOD') === 'POST' && $this->form_validation->run() == TRUE) {
 			if (!empty($destination['id'])) {
@@ -255,9 +256,34 @@ class Admin extends CI_Controller {
 	public function delete_destination(){
 		extract($this->input->post());
 		if ($this->destination->delete($id)) {
-			echo_json(['status'=>'success','saved'=>'true','message'=>'destination deleted successfully.']);
+			echo_json(['status'=>'success','saved'=>'true','message'=>'Destination deleted successfully.']);
 		}else{
 			echo_json(['status'=>'failure']);
 		}
+	}
+
+	public function contact_us(){
+		$data['contact_us'] = $this->contact_us->getAll();
+		load_view('contact-us',$data,'admin');
+	}
+
+	public function delete_contact_us(){
+		extract($this->input->post());
+		if ($this->contact_us->delete($id)) {
+			echo_json(['status'=>'success','saved'=>'true','message'=>'Item deleted successfully.']);
+		}else{
+			echo_json(['status'=>'failure']);
+		}
+	}
+
+	public function reply_contact_us($id){
+		$id = base64_decode($id);
+		$data['contact_us'] = $this->contact_us->getAll('',['id'=>$id])[0];
+		$this->form_validation->set_rules('reply', 'Reply', 'trim|required|strip_tags');
+		if ($this->input->server('REQUEST_METHOD') === 'POST' && $this->form_validation->run() == TRUE) {
+			$this->contact_us->update(['status'=>"replied",'id'=>$id]);
+			__send_email($data['contact_us']['email'],'contact_reply',['message'=>$_POST['reply'],'link'=>base_url()],'');
+		}
+		load_view('reply-contact-us',$data,'admin');
 	}
 }

@@ -5,8 +5,8 @@ require(APPPATH.'third_party/fb/vendor/autoload.php');
 
 function get_facebook_object(){
 	return new \Facebook\Facebook([
-	  'app_id' => '594710907544099',
-	  'app_secret' => '6291afe92450912cdb6ca32a73a5f2c7',
+	  'app_id' => FACEBOOK_APP_ID,
+	  'app_secret' => FACEBOOK_APP_SECRET,
 	  'default_graph_version' => 'v2.10',
 	  //'default_access_token' => '{access-token}', // optional
 	]);
